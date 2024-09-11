@@ -27,11 +27,11 @@
 <body class="g-sidenav-show  bg-gray-100">
 
     {{-- sidebar --}}
-    @include('dashboard.sidebarNew')
+    @include('tahun_ajarans.sidebar')
     {{-- end off sidebar --}}
 
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
-        @include('dashboard.navbar')
+        @include('tahun_ajarans.navbar')
         <div class="container-fluid py-4">
 
             @yield('content')

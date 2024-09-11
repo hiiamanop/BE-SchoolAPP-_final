@@ -63,6 +63,7 @@ use App\Http\Controllers\MataPelajaranController;
 Route::resource('mata-pelajaran', MataPelajaranController::class);
 
 use App\Http\Controllers\JenisPenilaianController;
+use App\Http\Controllers\TahunAjaranController;
 
 // jenis penilaian management
 Route::resource('jenis-penilaian', JenisPenilaianController::class);
@@ -72,5 +73,7 @@ use App\Http\Controllers\TokenController;
 // Token management
 Route::resource('tokens', TokenController::class);
 
+// Tahun Ajaran management
+Route::resource('tahun-ajaran', TahunAjaranController::class);
 
 
