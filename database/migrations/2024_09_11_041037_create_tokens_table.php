@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('tokens', function (Blueprint $table) {
             $table->id();
+            $table->string('value')->nullable(false);
+            $table->date('lifetime')->nullable(false);
             $table->timestamps();
         });
     }

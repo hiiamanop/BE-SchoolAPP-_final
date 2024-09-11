@@ -56,3 +56,21 @@ use App\Http\Controllers\KelasController;
 
 // Kelas management
 Route::resource('kelas', KelasController::class);
+
+use App\Http\Controllers\MataPelajaranController;
+
+// Mata Pelajaran management
+Route::resource('mata-pelajaran', MataPelajaranController::class);
+
+use App\Http\Controllers\JenisPenilaianController;
+
+// jenis penilaian management
+Route::resource('jenis-penilaian', JenisPenilaianController::class);
+
+use App\Http\Controllers\TokenController;
+
+// Token management
+Route::resource('tokens', TokenController::class);
+
+
+

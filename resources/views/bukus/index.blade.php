@@ -1,4 +1,4 @@
-@extends('kelas.master')
+@extends('bukus.master')
 
 @section('content')
     <div class="row">
