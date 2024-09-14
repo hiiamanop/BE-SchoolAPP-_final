@@ -18,6 +18,14 @@
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <label for="nomor_induk" class="form-label">Nomor Induk</label>
+                        <input type="text" class="form-control" id="nomor_induk" name="nomor_induk" value="{{ old('nomor_induk') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tahun_masuk" class="form-label">Tahun Masuk</label>
+                        <input type="text" class="form-control" id="tahun_masuk" name="tahun_masuk" value="{{ old('tahun_masuk') }}">
+                    </div>
+                    <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
                         @error('email')
@@ -35,6 +43,8 @@
                         <label for="password_confirmation" class="form-label">Confirm Password</label>
                         <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
                     </div>
+                    <!-- Hidden field for role_id -->
+                    <input type="hidden" name="role_id" value="2">
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">Create Guru</button>
                     </div>

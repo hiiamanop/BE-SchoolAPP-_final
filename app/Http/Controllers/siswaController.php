@@ -2,75 +2,78 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\SiswaImport;
 
 class SiswaController extends Controller
 {
-    // Display a listing of siswa
     public function index()
     {
-        $siswa = User::where('role_id', 3) // Assuming role_id 3 represents siswa
-                     ->get();
-        return view('siswas.index', compact('siswa'));
+        $siswas = Siswa::all();
+        return view('siswas.index', compact('siswas'));
     }
 
-    // Show the form for creating a new siswa
     public function create()
     {
         return view('siswas.create');
     }
 
-    // Store a newly created siswa in storage
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:siswas',
+            'password' => 'required|min:6|confirmed',
+            'nomor_induk' => 'nullable',
+            'tahun_masuk' => 'nullable|integer',
         ]);
 
-        User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role_id' => 3, // Assuming role_id 3 represents siswa
-        ]);
+        Siswa::create($request->only('name', 'email', 'password', 'nomor_induk', 'tahun_masuk'));
 
         return redirect()->route('siswas.index')->with('success', 'Siswa created successfully.');
     }
 
-    // Show the form for editing the specified siswa
-    public function edit(User $siswa)
+    public function edit(Siswa $siswa)
     {
         return view('siswas.edit', compact('siswa'));
     }
 
-    // Update the specified siswa in storage
-    public function update(Request $request, User $siswa)
+    public function update(Request $request, Siswa $siswa)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $siswa->id,
-            'password' => 'nullable|string|min:8|confirmed',
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:siswas,email,' . $siswa->id,
+            'password' => 'nullable|min:6|confirmed',
+            'nomor_induk' => 'nullable',
+            'tahun_masuk' => 'nullable|integer',
         ]);
 
-        $siswa->name = $validated['name'];
-        $siswa->email = $validated['email'];
+        $data = $request->only('name', 'email', 'nomor_induk', 'tahun_masuk');
         if ($request->filled('password')) {
-            $siswa->password = Hash::make($validated['password']);
+            $data['password'] = bcrypt($request->password);
         }
-        $siswa->save();
+
+        $siswa->update($data);
 
         return redirect()->route('siswas.index')->with('success', 'Siswa updated successfully.');
     }
 
-    // Remove the specified siswa from storage
-    public function destroy(User $siswa)
+    public function destroy(Siswa $siswa)
     {
         $siswa->delete();
-
         return redirect()->route('siswas.index')->with('success', 'Siswa deleted successfully.');
+    }
+
+    public function import1(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx',
+        ]);
+
+        Excel::import(new SiswaImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Siswas imported successfully.');
     }
 }

@@ -2,58 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Imports\GuruImport;
+use App\Models\Guru;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GuruController extends Controller
 {
-    // Display a listing of gurus
     public function index()
     {
-        $gurus = User::where('role_id', 2) // Assuming role_id 2 represents guru
-                     ->get();
+        $gurus = Guru::all(); // Fetch all gurus
         return view('gurus.index', compact('gurus'));
     }
 
-    // Show the form for creating a new guru
+    public function createImport()
+    {
+        return view('gurus.import');
+    }
+
     public function create()
     {
         return view('gurus.create');
     }
 
-    // Store a newly created guru in storage
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:gurus,email',
             'password' => 'required|string|min:8|confirmed',
+            'nomor_induk' => 'nullable|string|max:255',
+            'tahun_masuk' => 'nullable|digits:4',
         ]);
 
-        User::create([
+        Guru::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role_id' => 2, // Assuming role_id 2 represents guru
+            'role_id' => 2, // Role ID for guru
+            'nomor_induk' => $validated['nomor_induk'] ?? null,
+            'tahun_masuk' => $validated['tahun_masuk'] ?? null,
         ]);
 
         return redirect()->route('gurus.index')->with('success', 'Guru created successfully.');
     }
 
-    // Show the form for editing the specified guru
-    public function edit(User $guru)
-    {
-        return view('gurus.edit', compact('guru'));
-    }
-
-    // Update the specified guru in storage
-    public function update(Request $request, User $guru)
+    public function update(Request $request, Guru $guru)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $guru->id,
+            'email' => 'required|email|unique:gurus,email,' . $guru->id,
             'password' => 'nullable|string|min:8|confirmed',
+            'nomor_induk' => 'nullable|string|max:255',
+            'tahun_masuk' => 'nullable|digits:4',
         ]);
 
         $guru->name = $validated['name'];
@@ -61,16 +63,34 @@ class GuruController extends Controller
         if ($request->filled('password')) {
             $guru->password = Hash::make($validated['password']);
         }
+        $guru->nomor_induk = $validated['nomor_induk'] ?? $guru->nomor_induk;
+        $guru->tahun_masuk = $validated['tahun_masuk'] ?? $guru->tahun_masuk;
         $guru->save();
 
         return redirect()->route('gurus.index')->with('success', 'Guru updated successfully.');
     }
 
-    // Remove the specified guru from storage
-    public function destroy(User $guru)
+    public function edit(Guru $guru)
+    {
+        return view('gurus.edit', compact('guru'));
+    }
+
+
+    public function destroy(Guru $guru)
     {
         $guru->delete();
 
         return redirect()->route('gurus.index')->with('success', 'Guru deleted successfully.');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx',
+        ]);
+
+        Excel::import(new GuruImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Gurus imported successfully.');
     }
 }

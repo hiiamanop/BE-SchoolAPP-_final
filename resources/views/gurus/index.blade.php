@@ -7,6 +7,41 @@
                 <div class="card-header pb-0">
                     <h6>Gurus Table</h6>
                     <a href="{{ route('gurus.create') }}" class="btn btn-primary float-end">Create New Guru</a>
+                    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                        data-bs-target="#importGuruModal">
+                        Import Guru
+                    </button>
+                    
+                    <!-- Import Guru Modal -->
+                    <div class="modal fade" id="importGuruModal" tabindex="-1" aria-labelledby="importGuruModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="importGuruModalLabel">Import Guru</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ route('gurus.import') }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label for="file" class="form-label">Select Excel File</label>
+                                            <input type="file" class="form-control" id="file" name="file" accept=".xlsx"
+                                                required>
+                                            @error('file')
+                                                <span class="text-danger text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Import</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
@@ -18,6 +53,10 @@
                                         Name</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Email</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Nomor Induk</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Tahun Masuk</th>
                                     <th
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Actions</th>
@@ -38,6 +77,12 @@
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $guru->email }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $guru->nomor_induk }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $guru->tahun_masuk }}</p>
                                         </td>
                                         <td class="align-middle text-center">
                                             <button type="button"
@@ -112,6 +157,20 @@
                                                             <input type="password" class="form-control"
                                                                 id="password_confirmation{{ $guru->id }}"
                                                                 name="password_confirmation">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="nomor_induk{{ $guru->id }}"
+                                                                class="form-label">Nomor Induk</label>
+                                                            <input type="text" class="form-control"
+                                                                id="nomor_induk{{ $guru->id }}" name="nomor_induk"
+                                                                value="{{ $guru->nomor_induk }}">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="tahun_masuk{{ $guru->id }}"
+                                                                class="form-label">Tahun Masuk</label>
+                                                            <input type="text" class="form-control"
+                                                                id="tahun_masuk{{ $guru->id }}" name="tahun_masuk"
+                                                                value="{{ $guru->tahun_masuk }}">
                                                         </div>
                                                         <div class="text-center">
                                                             <button type="submit" class="btn btn-primary">Update

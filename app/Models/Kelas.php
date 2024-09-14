@@ -12,4 +12,9 @@ class Kelas extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function siswas()
+    {
+        return $this->hasMany(KelasSiswa::class, 'kelas_id');
+    }
 }

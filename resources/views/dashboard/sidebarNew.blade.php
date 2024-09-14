@@ -372,12 +372,8 @@
                         <span class="nav-link-text ms-1">Jenis Penilian</span>
                     </a>
                 </li>
-
-                <li class="nav-item mt-3">
-                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">KBM</h6>
-                </li>
                 <li class="nav-item">
-                    <a class="nav-link  " href="{{ route('kelas.index') }}">
+                    <a class="nav-link  " href="{{ route('kelas_siswas.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -434,6 +430,10 @@
                         <span class="nav-link-text ms-1">Guru Pelajaran</span>
                     </a>
                 </li>
+                <li class="nav-item mt-3">
+                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">KBM</h6>
+                </li>
+
             </ul>
     </div>
     <div class="sidenav-footer mx-3 ">

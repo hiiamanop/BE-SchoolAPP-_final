@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\buku;
 use App\Models\KategoriBuku;
 use Illuminate\Http\Request;
+use App\Imports\BukuImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
+
 
 class BukuController extends Controller
 {
@@ -78,4 +82,24 @@ class BukuController extends Controller
 
         return redirect()->route('bukus.index')->with('success', 'Book deleted successfully.');
     }
+
+    public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx',
+    ]);
+
+    DB::beginTransaction();
+    
+    try {
+        Excel::import(new BukuImport, $request->file('file'));
+
+        DB::commit();
+        return redirect()->route('bukus.index')->with('success', 'Books imported successfully');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->route('bukus.index')->with('error', 'Error during import: ' . $e->getMessage());
+    }
+}
+
 }
