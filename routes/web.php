@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
 });
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AssignmentController as ControllersAssignmentController;
 
 // Admin management
 Route::resource('admins', AdminController::class)->middleware('auth');
@@ -96,7 +97,18 @@ Route::delete('kelas_siswas/{id}', [KelasSiswaController::class, 'destroy'])->na
 
 
 use App\Http\Controllers\GuruPelajaranController;
+use App\Http\Controllers\KHSController;
 
 // Kelas Siswa management
 Route::resource('guru_pelajarans', GuruPelajaranController::class);
 Route::get('/guru_pelajarans-import', [GuruPelajaranController::class, 'import'])->name('guru_pelajarans.import');
+
+// KHS manageement
+Route::resource('khs', KHSController::class);
+
+Route::resource('assignments', ControllersAssignmentController::class);
+
+use App\Http\Controllers\SoalController;
+
+Route::resource('soals', SoalController::class);
+

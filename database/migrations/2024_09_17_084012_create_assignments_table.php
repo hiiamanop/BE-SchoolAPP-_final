@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('_k_h_s', function (Blueprint $table) {
+        Schema::create('assignments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade'); // Foreign key from siswa
             $table->foreignId('mata_pelajaran_id')->constrained('mata_pelajarans')->onDelete('cascade'); // Foreign key from Mata Pelajaran
             $table->foreignId('jenis_penilaian_id')->constrained('jenis_penilaians')->onDelete('cascade'); // Foreign key from Jenis Penilaian
-            $table->foreignId('tahun_ajaran_id')->constrained('tahun_ajarans')->onDelete('cascade'); // Foreign key from Jenis Penilaian
-            $table->integer('nilai');
+            $table->foreignId('token_id')->constrained('tokens')->onDelete('cascade'); // Foreign key from Jenis Penilaian
+            $table->string('code_assignment');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_k_h_s');
+        Schema::dropIfExists('assignments');
     }
 };
