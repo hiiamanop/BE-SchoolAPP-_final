@@ -7,6 +7,41 @@
                 <div class="card-header pb-0">
                     <h6>Kelas Table</h6>
                     <a href="{{ route('kelas.create') }}" class="btn btn-primary float-end">Create New Kelas</a>
+                    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                        data-bs-target="#importSiswaModal">
+                        Import Buku
+                    </button>
+
+                    <!-- Import Siswa Modal -->
+                    <div class="modal fade" id="importSiswaModal" tabindex="-1" aria-labelledby="importSiswaModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="importSiswaModalLabel">Import Buku</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ route('kelas.import') }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label for="file" class="form-label">Select Excel File</label>
+                                            <input type="file" class="form-control" id="file" name="file"
+                                                accept=".xlsx" required>
+                                            @error('file')
+                                                <span class="text-danger text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Import</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
@@ -61,14 +96,16 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="editKelasModalLabel{{ $kelasItem->id }}">Edit
+                                                    <h5 class="modal-title" id="editKelasModalLabel{{ $kelasItem->id }}">
+                                                        Edit
                                                         Kelas</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form id="editKelasForm{{ $kelasItem->id }}"
-                                                        action="{{ route('kelas.update', $kelasItem->id) }}" method="POST">
+                                                        action="{{ route('kelas.update', $kelasItem->id) }}"
+                                                        method="POST">
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="mb-3">

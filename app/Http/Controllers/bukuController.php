@@ -84,22 +84,21 @@ class BukuController extends Controller
     }
 
     public function import(Request $request)
-{
-    $request->validate([
-        'file' => 'required|mimes:xlsx',
-    ]);
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
 
-    DB::beginTransaction();
-    
-    try {
-        Excel::import(new BukuImport, $request->file('file'));
+        DB::beginTransaction();
 
-        DB::commit();
-        return redirect()->route('bukus.index')->with('success', 'Books imported successfully');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return redirect()->route('bukus.index')->with('error', 'Error during import: ' . $e->getMessage());
+        try {
+            Excel::import(new BukuImport, $request->file('file'));
+
+            DB::commit();
+            return redirect()->route('bukus.index')->with('success', 'Books imported successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('bukus.index')->with('error', 'Error during import: ' . $e->getMessage());
+        }
     }
-}
-
 }

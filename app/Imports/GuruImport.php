@@ -2,10 +2,9 @@
 
 namespace App\Imports;
 
-use App\Models\Guru;
+use App\Models\GuruPelajaran;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Support\Facades\Hash;
 
 class GuruImport implements ToModel, WithHeadingRow
 {
@@ -16,13 +15,9 @@ class GuruImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        return new Guru([
-            'name' => $row['name'],
-            'email' => $row['email'],
-            'password' => Hash::make($row['password']),
-            'role_id' => $row['role_id'],
-            'nomor_induk' => $row['nomor_induk'],
-            'tahun_masuk' => $row['tahun_masuk'],
+        return new GuruPelajaran([
+            'guru_id' => $row['guru_id'],
+            'mata_pelajaran_id' => $row['mata_pelajaran_id'],
         ]);
     }
 }

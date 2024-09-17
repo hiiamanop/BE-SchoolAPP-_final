@@ -5,12 +5,39 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>Siswas Table</h6>
+                    <h6>Tabel Siswa</h6>
+
                     <a href="{{ route('siswas.create') }}" class="btn btn-primary float-end">Create New Siswa</a>
                     <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
                         data-bs-target="#importSiswaModal">
                         Import Siswa
                     </button>
+
+                    <!-- Filter Form -->
+                    <form action="{{ route('siswas.index') }}" method="GET" class="d-flex mb-3">
+                        <div class="row">
+                            <div class="form-group me-2">
+                                <label for="tahun_masuk" class="form-label">Filter by Tahun Masuk</label>
+                                <select name="tahun_masuk" id="tahun_masuk" class="form-control">
+                                    <option value="">All</option>
+                                    @foreach ($siswas->pluck('tahun_masuk')->unique() as $tahun)
+                                        <option value="{{ $tahun }}"
+                                            {{ request('tahun_masuk') == $tahun ? 'selected' : '' }}>
+                                            {{ $tahun }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group align-self-end">
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                                <a href="{{ route('siswas.index') }}" class="btn btn-secondary">Clear</a>
+                            </div>
+                        </div>
+
+                    </form>
+
+
 
                     <!-- Import Siswa Modal -->
                     <div class="modal fade" id="importSiswaModal" tabindex="-1" aria-labelledby="importSiswaModalLabel"
@@ -120,7 +147,8 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{{ route('siswas.update', $siswa->id) }}" method="POST">
+                                                    <form action="{{ route('siswas.update', $siswa->id) }}"
+                                                        method="POST">
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="mb-3">

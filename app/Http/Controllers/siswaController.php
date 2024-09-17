@@ -9,11 +9,20 @@ use App\Imports\SiswaImport;
 
 class SiswaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $siswas = Siswa::all();
-        return view('siswas.index', compact('siswas'));
+        $tahun_masuk = $request->input('tahun_masuk'); // Get filter from the request
+
+        // Check if filter exists, apply it, otherwise get all records
+        if ($tahun_masuk) {
+            $siswas = Siswa::where('tahun_masuk', $tahun_masuk)->get();
+        } else {
+            $siswas = Siswa::all();
+        }
+
+        return view('siswas.index', compact('siswas', 'tahun_masuk'));
     }
+
 
     public function create()
     {

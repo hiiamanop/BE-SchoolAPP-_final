@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use App\Imports\KelasImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
+
 
 class KelasController extends Controller
 {
@@ -60,7 +64,6 @@ class KelasController extends Controller
         return redirect()->route('kelas.index')->with('success', 'Kelas updated successfully.');
     }
 
-
     // Remove the specified class from storage
     public function destroy(Kelas $kelas)
     {
@@ -68,4 +71,25 @@ class KelasController extends Controller
 
         return redirect()->route('kelas.index')->with('success', 'Class deleted successfully.');
     }
+
+    public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx',  // Ensure the file is an XLSX
+    ]);
+
+    DB::beginTransaction();
+    
+    try {
+        // Import the file using Laravel Excel
+        Excel::import(new KelasImport, $request->file('file'));
+
+        DB::commit();
+        return redirect()->route('kelas.index')->with('success', 'Classes imported successfully');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->route('kelas.index')->with('error', 'Error during import: ' . $e->getMessage());
+    }
+}
+
 }

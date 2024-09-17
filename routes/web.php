@@ -64,6 +64,7 @@ use App\Http\Controllers\KelasController;
 
 // Kelas management
 Route::resource('kelas', KelasController::class);
+Route::post('/kelas/import', [KelasController::class, 'import'])->name('kelas.import');
 
 use App\Http\Controllers\MataPelajaranController;
 
@@ -92,3 +93,10 @@ Route::resource('kelas_siswas', KelasSiswaController::class);
 // Add this custom route for creating a KelasSiswa with a kelasId parameter
 Route::get('kelas_siswas/create/{kelasId}', [KelasSiswaController::class, 'create'])->name('kelas_siswas.create');
 Route::delete('kelas_siswas/{id}', [KelasSiswaController::class, 'destroy'])->name('kelas_siswas.destroy');
+
+
+use App\Http\Controllers\GuruPelajaranController;
+
+// Kelas Siswa management
+Route::resource('guru_pelajarans', GuruPelajaranController::class);
+Route::get('/guru_pelajarans-import', [GuruPelajaranController::class, 'import'])->name('guru_pelajarans.import');

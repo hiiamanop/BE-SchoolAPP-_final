@@ -11,7 +11,31 @@
                         data-bs-target="#importGuruModal">
                         Import Guru
                     </button>
-                    
+
+                    <!-- Filter Form -->
+                    <form action="{{ route('siswas.index') }}" method="GET" class="d-flex mb-3">
+                        <div class="row">
+                            <div class="form-group me-2">
+                                <label for="tahun_masuk" class="form-label">Filter by Tahun Masuk</label>
+                                <select name="tahun_masuk" id="tahun_masuk" class="form-control">
+                                    <option value="">All</option>
+                                    @foreach ($gurus->pluck('tahun_masuk')->unique() as $tahun)
+                                        <option value="{{ $tahun }}"
+                                            {{ request('tahun_masuk') == $tahun ? 'selected' : '' }}>
+                                            {{ $tahun }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group align-self-end">
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                                <a href="{{ route('siswas.index') }}" class="btn btn-secondary">Clear</a>
+                            </div>
+                        </div>
+
+                    </form>
+
                     <!-- Import Guru Modal -->
                     <div class="modal fade" id="importGuruModal" tabindex="-1" aria-labelledby="importGuruModalLabel"
                         aria-hidden="true">
@@ -27,8 +51,8 @@
                                         @csrf
                                         <div class="mb-3">
                                             <label for="file" class="form-label">Select Excel File</label>
-                                            <input type="file" class="form-control" id="file" name="file" accept=".xlsx"
-                                                required>
+                                            <input type="file" class="form-control" id="file" name="file"
+                                                accept=".xlsx" required>
                                             @error('file')
                                                 <span class="text-danger text-xs">{{ $message }}</span>
                                             @enderror
