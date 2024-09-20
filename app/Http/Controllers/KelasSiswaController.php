@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\KelasSiswaImport;
 use App\Models\Kelas;
 use App\Models\User;
 use App\Models\KelasSiswa;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KelasSiswaController extends Controller
 {
@@ -97,5 +100,26 @@ class KelasSiswaController extends Controller
 
         return redirect()->route('kelas_siswas.index')
             ->with('success', 'Siswa removed from Kelas successfully!');
+    }
+
+    public function import(Request $request)
+    {
+        // Validate that the file is an XLSX file
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // Import the file using the KelasSiswaImport class
+            Excel::import(new KelasSiswaImport, $request->file('file'));
+
+            DB::commit();
+            return redirect()->route('kelas_siswas.index')->with('success', 'Siswa imported successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('kelas_siswas.index')->with('error', 'Error during import: ' . $e->getMessage());
+        }
     }
 }

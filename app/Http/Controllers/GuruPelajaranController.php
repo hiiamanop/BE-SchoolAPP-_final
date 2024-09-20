@@ -13,14 +13,29 @@ class GuruPelajaranController extends Controller
 {
     /**
      * Display a listing of the resource.
-     */ public function index()
+     */ public function index(Request $request)
     {
-        $guruPelajarans = GuruPelajaran::with('guru', 'mataPelajaran')->get(); // Fetch all GuruPelajarans with related models
-        $gurus = Guru::all(); // Fetch all gurus
-        $mataPelajarans = MataPelajaran::all(); // Fetch all mata pelajaran
+        // Fetch all filters from the request
+        $guruId = $request->input('guru_id');
+        $mataPelajaranId = $request->input('mata_pelajaran_id');
+
+        // Query the database with the applied filters
+        $guruPelajarans = GuruPelajaran::with('guru', 'mataPelajaran')
+            ->when($guruId, function ($query, $guruId) {
+                return $query->where('guru_id', $guruId);
+            })
+            ->when($mataPelajaranId, function ($query, $mataPelajaranId) {
+                return $query->where('mata_pelajaran_id', $mataPelajaranId);
+            })
+            ->get();
+
+        // Fetch all gurus and mata pelajarans for the filter dropdowns
+        $gurus = Guru::all();
+        $mataPelajarans = MataPelajaran::all();
 
         return view('guru_pelajarans.index', compact('guruPelajarans', 'gurus', 'mataPelajarans'));
     }
+
 
 
     /**

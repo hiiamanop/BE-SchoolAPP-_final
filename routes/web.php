@@ -94,10 +94,13 @@ Route::resource('kelas_siswas', KelasSiswaController::class);
 // Add this custom route for creating a KelasSiswa with a kelasId parameter
 Route::get('kelas_siswas/create/{kelasId}', [KelasSiswaController::class, 'create'])->name('kelas_siswas.create');
 Route::delete('kelas_siswas/{id}', [KelasSiswaController::class, 'destroy'])->name('kelas_siswas.destroy');
+Route::post('kelas_siswas/import', [KelasSiswaController::class, 'import'])->name('kelas_siswas.import');
+
 
 
 use App\Http\Controllers\GuruPelajaranController;
 use App\Http\Controllers\KHSController;
+use App\Http\Controllers\PenilaianController;
 
 // Kelas Siswa management
 Route::resource('guru_pelajarans', GuruPelajaranController::class);
@@ -111,4 +114,14 @@ Route::resource('assignments', ControllersAssignmentController::class);
 use App\Http\Controllers\SoalController;
 
 Route::resource('soals', SoalController::class);
+
+Route::resource('penilaians', PenilaianController::class);
+
+Route::resource('pilihan_gandas', App\Http\Controllers\PilihanGandaController::class);
+
+use App\Http\Controllers\LembarJawabanController;
+
+Route::get('/lembar-jawaban', [LembarJawabanController::class, 'index'])->name('lembar_jawaban.index');
+Route::get('/lembar-jawaban/{assignmentId}/{siswaId}', [LembarJawabanController::class, 'detail'])->name('lembar_jawaban.detail');
+Route::post('/lembar-jawaban/{lembarJawabanId}/update-score', [LembarJawabanController::class, 'updateScore'])->name('lembar_jawaban.update_score');
 

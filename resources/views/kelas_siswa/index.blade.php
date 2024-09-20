@@ -24,7 +24,43 @@
                         data-bs-target="#addSiswaModal">
                         Add New Siswa to Kelas
                     </button>
+                    <!-- Add New Siswa Button -->
+                    <button type="button" class="btn btn-primary float-end ms-2" data-bs-toggle="modal"
+                        data-bs-target="#ImportModal">
+                        Import Siswa to Kelas
+                    </button>
                 </div>
+
+                <!-- Import Modal -->
+                <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="importModalLabel">Import Siswa</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('kelas_siswas.import') }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="file" class="form-label">Upload File (XLSX)</label>
+                                        <input type="file" class="form-control" id="file" name="file" required>
+                                        @error('file')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-success">Import</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0">

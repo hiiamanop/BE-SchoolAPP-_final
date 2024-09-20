@@ -13,29 +13,63 @@
                         Import Siswa
                     </button>
 
-                    <!-- Filter Form -->
-                    <form action="{{ route('siswas.index') }}" method="GET" class="d-flex mb-3">
-                        <div class="row">
-                            <div class="form-group me-2">
-                                <label for="tahun_masuk" class="form-label">Filter by Tahun Masuk</label>
-                                <select name="tahun_masuk" id="tahun_masuk" class="form-control">
-                                    <option value="">All</option>
-                                    @foreach ($siswas->pluck('tahun_masuk')->unique() as $tahun)
-                                        <option value="{{ $tahun }}"
-                                            {{ request('tahun_masuk') == $tahun ? 'selected' : '' }}>
-                                            {{ $tahun }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                    <button type="button" class="btn btn-primary float-end me-2" data-bs-toggle="modal"
+                        data-bs-target="#filterSiswaModal">
+                        Filter
+                    </button>
 
-                            <div class="form-group align-self-end">
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                                <a href="{{ route('siswas.index') }}" class="btn btn-secondary">Clear</a>
+
+
+                    <!-- Filter Modal -->
+                    <div class="modal fade" id="filterSiswaModal" tabindex="-1" aria-labelledby="filterSiswaModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="filterSiswaModalLabel">Filter Siswa</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="filterSiswaForm" action="{{ route('siswas.index') }}" method="GET">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                value="{{ request('name') }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email" name="email"
+                                                value="{{ request('email') }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="nomor_induk" class="form-label">Nomor Induk</label>
+                                            <input type="text" class="form-control" id="nomor_induk" name="nomor_induk"
+                                                value="{{ request('nomor_induk') }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="tahun_masuk" class="form-label">Tahun Masuk</label>
+                                            <select name="tahun_masuk" id="tahun_masuk" class="form-control">
+                                                <option value="">All</option>
+                                                @foreach ($siswas->pluck('tahun_masuk')->unique() as $tahun)
+                                                    <option value="{{ $tahun }}"
+                                                        {{ request('tahun_masuk') == $tahun ? 'selected' : '' }}>
+                                                        {{ $tahun }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                                            <a href="{{ route('siswas.index') }}" class="btn btn-secondary">Clear</a>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
-                    </form>
 
 
 
@@ -116,8 +150,9 @@
                                         <td class="align-middle text-center">
                                             <button type="button"
                                                 class="text-secondary font-weight-bold text-xs btn btn-link"
-                                                data-bs-toggle="modal" data-bs-target="#editSiswaModal{{ $siswa->id }}"
-                                                data-toggle="tooltip" data-original-title="Edit Guru">
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editSiswaModal{{ $siswa->id }}" data-toggle="tooltip"
+                                                data-original-title="Edit Guru">
                                                 Edit
                                             </button>
 

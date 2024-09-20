@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('assignment_id')->constrained('assignments')->onDelete('cascade'); // Foreign key from Mata Pelajaran
             $table->integer('jumlah_soal');
             $table->integer('max_score');
-            $table->integer('pilgan_score');
-            $table->integer('essay_score');
+            $table->integer('pilgan_score')->nullable();
+            $table->integer('essay_score')->nullable();
             $table->timestamps();
         });
     }

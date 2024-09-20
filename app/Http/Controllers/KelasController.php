@@ -73,23 +73,22 @@ class KelasController extends Controller
     }
 
     public function import(Request $request)
-{
-    $request->validate([
-        'file' => 'required|mimes:xlsx',  // Ensure the file is an XLSX
-    ]);
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',  // Ensure the file is an XLSX
+        ]);
 
-    DB::beginTransaction();
-    
-    try {
-        // Import the file using Laravel Excel
-        Excel::import(new KelasImport, $request->file('file'));
+        DB::beginTransaction();
 
-        DB::commit();
-        return redirect()->route('kelas.index')->with('success', 'Classes imported successfully');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return redirect()->route('kelas.index')->with('error', 'Error during import: ' . $e->getMessage());
+        try {
+            // Import the file using Laravel Excel
+            Excel::import(new KelasImport, $request->file('file'));
+
+            DB::commit();
+            return redirect()->route('kelas.index')->with('success', 'Classes imported successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('kelas.index')->with('error', 'Error during import: ' . $e->getMessage());
+        }
     }
-}
-
 }

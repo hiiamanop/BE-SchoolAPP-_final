@@ -11,15 +11,30 @@ use Maatwebsite\Excel\Facades\Excel;
 class GuruController extends Controller
 {
     public function index(Request $request)
-{
-    $tahun_masuk = $request->input('tahun_masuk');
-    
-    $gurus = Guru::when($tahun_masuk, function ($query, $tahun_masuk) {
-        return $query->where('tahun_masuk', $tahun_masuk);
-    })->get(); // Fetch filtered or all gurus
+    {
+        $query = Guru::query();
 
-    return view('gurus.index', compact('gurus', 'tahun_masuk'));
-}
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', $request->input('email'));
+        }
+
+        if ($request->filled('nomor_induk')) {
+            $query->where('nomor_induk', $request->input('nomor_induk'));
+        }
+
+        if ($request->filled('tahun_masuk')) {
+            $query->where('tahun_masuk', $request->input('tahun_masuk'));
+        }
+
+        $gurus = $query->get();
+
+        return view('gurus.index', compact('gurus'));
+    }
+
 
 
     public function createImport()

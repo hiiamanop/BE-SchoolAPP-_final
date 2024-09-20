@@ -11,17 +11,29 @@ class SiswaController extends Controller
 {
     public function index(Request $request)
     {
-        $tahun_masuk = $request->input('tahun_masuk'); // Get filter from the request
+        $query = Siswa::query();
 
-        // Check if filter exists, apply it, otherwise get all records
-        if ($tahun_masuk) {
-            $siswas = Siswa::where('tahun_masuk', $tahun_masuk)->get();
-        } else {
-            $siswas = Siswa::all();
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
         }
 
-        return view('siswas.index', compact('siswas', 'tahun_masuk'));
+        if ($request->filled('email')) {
+            $query->where('email', $request->input('email'));
+        }
+
+        if ($request->filled('nomor_induk')) {
+            $query->where('nomor_induk', $request->input('nomor_induk'));
+        }
+
+        if ($request->filled('tahun_masuk')) {
+            $query->where('tahun_masuk', $request->input('tahun_masuk'));
+        }
+
+        $siswas = $query->get();
+
+        return view('siswas.index', compact('siswas'));
     }
+
 
 
     public function create()
