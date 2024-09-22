@@ -17,4 +17,15 @@ class JenisPenilaian extends Model
 
     // Optional: if you want to customize timestamps column names or format, you can do so here.
     public $timestamps = true; // This is the default, so you can omit this line if you prefer.
+
+    public function assignments()
+{
+    return $this->hasMany(Assignment::class);
+}
+
+public function k_h_s()
+{
+    return $this->hasMany(KHS::class);
+}
+
 }

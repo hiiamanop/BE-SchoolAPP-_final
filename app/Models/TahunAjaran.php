@@ -10,4 +10,11 @@ class TahunAjaran extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'start_year', 'end_year'];
+
+    public function k_h_s()
+{
+    return $this->hasMany(KHS::class);
 }
+
+}
+

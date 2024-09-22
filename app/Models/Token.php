@@ -20,4 +20,9 @@ class Token extends Model
 
     // Optionally, specify the type of the 'lifetime' attribute as a date.
     protected $dates = ['lifetime'];
+
+    public function assignments()
+{
+    return $this->hasMany(Assignment::class);
+}
 }

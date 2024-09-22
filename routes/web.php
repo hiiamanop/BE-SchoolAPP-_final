@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\GuruPelajaranController;
 use App\Http\Controllers\JenisPenilaianController;
@@ -29,42 +30,51 @@ Route::middleware('guest')->group(function () {
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard.index');
-    })->name('dashboard');
+    Route::resource('/dashboard', DashboardController::class);
+})->name('dashboard');
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Admin routes (full access)
-    Route::middleware('role:admin')->group(function () {
-        Route::resource('roles', RoleController::class)->except(['show']);
-        Route::resource('admins', AdminController::class);
-        Route::resource('gurus', GuruController::class);
-        Route::resource('siswas', SiswaController::class);
-        Route::resource('bukus', BukuController::class);
-        Route::resource('kategori_buku', KategoriBukuController::class);
-        Route::resource('kelas', KelasController::class);
-        Route::resource('mata-pelajaran', MataPelajaranController::class);
-        Route::resource('jenis-penilaian', JenisPenilaianController::class);
-        Route::resource('tokens', TokenController::class);
-        Route::resource('tahun-ajaran', TahunAjaranController::class);
-        Route::resource('kelas_siswas', KelasSiswaController::class);
-        Route::resource('guru_pelajarans', GuruPelajaranController::class);
-    });
 
-    // KHS management routes (only accessible to guru)
-    Route::middleware('role:guru')->group(function () {
-        Route::resource('khs', KHSController::class);
-        Route::resource('assignments', AssignmentController::class);
-        Route::resource('soals', SoalController::class);
-        Route::resource('penilaians', PenilaianController::class);
-        Route::resource('pilihan_gandas', App\Http\Controllers\PilihanGandaController::class);
-        Route::get('/lembar-jawaban', [LembarJawabanController::class, 'index'])->name('lembar_jawaban.index');
-        Route::get('/lembar-jawaban/{assignmentId}/{siswaId}', [LembarJawabanController::class, 'detail'])->name('lembar_jawaban.detail');
-        Route::post('/lembar-jawaban/{lembarJawabanId}/update-score', [LembarJawabanController::class, 'updateScore'])->name('lembar_jawaban.update_score');
-    });
+use App\Http\Controllers\ProfileController;
+
+Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+
+use App\Http\Middleware\RoleMiddleware;
+
+// Admin-only routes
+Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
+    Route::resource('roles', RoleController::class)->except(['show']);
+    Route::resource('admins', AdminController::class);
+    Route::resource('gurus', GuruController::class);
+    Route::resource('siswas', SiswaController::class);
+    Route::resource('bukus', BukuController::class);
+    Route::resource('kategori_buku', KategoriBukuController::class);
+    Route::resource('kelas', KelasController::class);
+    Route::resource('mata-pelajaran', MataPelajaranController::class);
+    Route::resource('jenis-penilaian', JenisPenilaianController::class);
+    Route::resource('tokens', TokenController::class);
+    Route::resource('tahun-ajaran', TahunAjaranController::class);
+    Route::resource('kelas_siswas', KelasSiswaController::class);
+    Route::resource('guru_pelajarans', GuruPelajaranController::class);
+    Route::resource('khs', KHSController::class);
+    Route::resource('assignments', AssignmentController::class);
+    Route::resource('soals', SoalController::class);
+    Route::resource('penilaians', PenilaianController::class);
+    Route::resource('pilihan_gandas', App\Http\Controllers\PilihanGandaController::class);
+    Route::get('/lembar-jawaban', [LembarJawabanController::class, 'index'])->name('lembar_jawaban.index');
+    Route::get('/lembar-jawaban/{assignmentId}/{siswaId}', [LembarJawabanController::class, 'detail'])->name('lembar_jawaban.detail');
+    Route::post('/lembar-jawaban/{lembarJawabanId}/update-score', [LembarJawabanController::class, 'updateScore'])->name('lembar_jawaban.update_score');
 });
 
-Route::get('/profile', function () {
-    return view('profile.master');
-})->name('profile');
+// Guru-only routes
+Route::middleware(['auth', RoleMiddleware::class . ':guru'])->group(function () {
+    Route::resource('khs', KHSController::class);
+    Route::resource('assignments', AssignmentController::class);
+    Route::resource('soals', SoalController::class);
+    Route::resource('penilaians', PenilaianController::class);
+    Route::resource('pilihan_gandas', App\Http\Controllers\PilihanGandaController::class);
+    Route::get('/lembar-jawaban', [LembarJawabanController::class, 'index'])->name('lembar_jawaban.index');
+    Route::get('/lembar-jawaban/{assignmentId}/{siswaId}', [LembarJawabanController::class, 'detail'])->name('lembar_jawaban.detail');
+    Route::post('/lembar-jawaban/{lembarJawabanId}/update-score', [LembarJawabanController::class, 'updateScore'])->name('lembar_jawaban.update_score');
+});

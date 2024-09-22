@@ -30,4 +30,10 @@ class Guru extends Model
             'password' => 'hashed',
         ];
     }
+
+    public function guruPelajaran()
+{
+    return $this->hasMany(GuruPelajaran::class);
+}
+
 }

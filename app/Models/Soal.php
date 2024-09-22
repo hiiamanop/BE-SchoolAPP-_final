@@ -27,4 +27,14 @@ class Soal extends Model
     {
         return $this->belongsTo(Assignment::class);
     }
+
+    public function lembarJawaban()
+    {
+        return $this->hasMany(LembarJawaban::class);
+    }
+
+    public function pilihanGanda()
+    {
+        return $this->hasMany(PilihanGanda::class);
+    }
 }

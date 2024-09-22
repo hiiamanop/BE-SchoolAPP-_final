@@ -13,6 +13,7 @@ class LembarJawaban extends Model
 
     // Kolom yang bisa diisi (mass assignable)
     protected $fillable = [
+        'siswa_id',
         'soal_id',
         'jawaban_siswa',
         'score', // Ini nullable karena score akan diberikan setelah guru memeriksa jawaban

@@ -51,8 +51,17 @@ class Assignment extends Model
     }
 
     public function soals()
-{
-    return $this->hasMany(Soal::class);
-}
+    {
+        return $this->hasMany(Soal::class);
+    }
 
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
+
+    public function lembarJawaban()
+    {
+        return $this->hasMany(LembarJawaban::class);
+    }
 }
