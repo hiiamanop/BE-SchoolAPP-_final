@@ -9,12 +9,12 @@ class KelasSiswa extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'kelas_id'];
+    protected $fillable = ['siswa_id', 'kelas_id'];
 
     // Relationship to the User (Siswa)
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'user_id');
+        return $this->belongsTo(Siswa::class, 'siswa_id');
     }
 
     // Relationship to the Kelas

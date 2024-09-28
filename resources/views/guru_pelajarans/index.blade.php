@@ -39,7 +39,7 @@
                 </div>
 
                 <!-- Import Guru Modal -->
-                <div class="modal fade" id="importGuruModal" tabindex="-1" aria-labelledby="importGuruModalLabel"
+                <div class="modal fade" id="importGuruPelajaranModal" tabindex="-1" aria-labelledby="importGuruModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">

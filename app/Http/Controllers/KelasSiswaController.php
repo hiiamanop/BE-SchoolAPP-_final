@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Imports\KelasSiswaImport;
 use App\Models\Kelas;
-use App\Models\User;
-use App\Models\KelasSiswa;
 use App\Models\Siswa;
+use App\Models\KelasSiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,7 +22,7 @@ class KelasSiswaController extends Controller
 
         // Get the list of kelas and siswa for dropdowns
         $kelasList = Kelas::all();
-        $siswaList = Siswa::all(); 
+        $siswaList = Siswa::all();
 
         // Query the KelasSiswa model
         if ($kelasId) {
@@ -46,7 +45,7 @@ class KelasSiswaController extends Controller
      */
     public function create($kelasId)
     {
-        // Fetch only users with the role of 'siswa' (role_id = 3)
+        // Fetch only siswas with the role of 'siswa' (role_id = 3)
         $siswas = Siswa::all();
 
         // Fetch all kelas for the dropdown
@@ -61,12 +60,12 @@ class KelasSiswaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'siswa_id' => 'required|exists:siswas,id',
             'kelas_id' => 'required|exists:kelas,id',
         ]);
 
         KelasSiswa::create([
-            'user_id' => $request->user_id,
+            'siswa_id' => $request->siswa_id,
             'kelas_id' => $request->kelas_id,
         ]);
 
@@ -77,12 +76,12 @@ class KelasSiswaController extends Controller
     public function update(Request $request, KelasSiswa $kelasSiswa)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'siswa_id' => 'required|exists:siswas,id',
             'kelas_id' => 'required|exists:kelas,id',
         ]);
 
         $kelasSiswa->update([
-            'user_id' => $request->user_id,
+            'siswa_id' => $request->siswa_id,
             'kelas_id' => $request->kelas_id,
         ]);
 
@@ -104,22 +103,14 @@ class KelasSiswaController extends Controller
 
     public function import(Request $request)
     {
-        // Validate that the file is an XLSX file
+        // Validate the uploaded file
         $request->validate([
-            'file' => 'required|mimes:xlsx',
+            'file' => 'required|file|mimes:xlsx',
         ]);
 
-        DB::beginTransaction();
+        // Import the file using the KelasSiswaImport class
+        Excel::import(new KelasSiswaImport, $request->file('file'));
 
-        try {
-            // Import the file using the KelasSiswaImport class
-            Excel::import(new KelasSiswaImport, $request->file('file'));
-
-            DB::commit();
-            return redirect()->route('kelas_siswas.index')->with('success', 'Siswa imported successfully');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->route('kelas_siswas.index')->with('error', 'Error during import: ' . $e->getMessage());
-        }
+        return redirect()->back()->with('success', 'KelasSiswa imported successfully.');
     }
 }

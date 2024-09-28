@@ -50,4 +50,9 @@ class Siswa extends Model
     {
         return $this->hasMany(LembarJawaban::class);
     }
+
+    public function enrollClass()
+    {
+        return $this->hasMany(EnrollClass::class);
+    }
 }

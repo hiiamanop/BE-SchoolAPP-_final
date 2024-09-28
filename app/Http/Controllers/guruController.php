@@ -106,10 +106,12 @@ class GuruController extends Controller
 
     public function import(Request $request)
     {
+        // Validate that the uploaded file is an Excel file
         $request->validate([
-            'file' => 'required|file|mimes:xlsx',
+            'file' => 'required|mimes:xlsx,xls',
         ]);
 
+        // Perform the import
         Excel::import(new GuruImport, $request->file('file'));
 
         return redirect()->back()->with('success', 'Gurus imported successfully.');

@@ -47,16 +47,23 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
     Route::resource('roles', RoleController::class)->except(['show']);
     Route::resource('admins', AdminController::class);
     Route::resource('gurus', GuruController::class);
+    Route::post('gurus/import', [GuruController::class, 'import'])->name('gurus.import');
     Route::resource('siswas', SiswaController::class);
+    Route::post('/upload', [SiswaController::class, 'import1'])->name('siswas.upload');
     Route::resource('bukus', BukuController::class);
+    Route::post('/bukus/import', [BukuController::class, 'import'])->name('bukus.import');
     Route::resource('kategori_buku', KategoriBukuController::class);
     Route::resource('kelas', KelasController::class);
+    Route::post('/kelas/import', [KelasController::class, 'import'])->name('kelas.import');
     Route::resource('mata-pelajaran', MataPelajaranController::class);
+    Route::post('/mata-pelajaran/import', [MataPelajaranController::class, 'import'])->name('mata-pelajaran.import');
     Route::resource('jenis-penilaian', JenisPenilaianController::class);
     Route::resource('tokens', TokenController::class);
     Route::resource('tahun-ajaran', TahunAjaranController::class);
     Route::resource('kelas_siswas', KelasSiswaController::class);
+    Route::post('kelas_siswas/import', [KelasSiswaController::class, 'import'])->name('kelas_siswas.import');
     Route::resource('guru_pelajarans', GuruPelajaranController::class);
+    Route::post('guru_pelajarans/import', [GuruPelajaranController::class, 'import'])->name('guru_pelajarans.import');
     Route::resource('khs', KHSController::class);
     Route::resource('assignments', AssignmentController::class);
     Route::resource('soals', SoalController::class);
@@ -68,7 +75,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
 });
 
 // Guru-only routes
-Route::middleware(['auth', RoleMiddleware::class . ':guru'])->group(function () {
+Route::middleware(['auth', RoleMiddleware::class . ':admin,guru'])->group(function () {
     Route::resource('khs', KHSController::class);
     Route::resource('assignments', AssignmentController::class);
     Route::resource('soals', SoalController::class);

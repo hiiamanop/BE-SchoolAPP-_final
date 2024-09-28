@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\MataPelajaranImport;
 use App\Models\MataPelajaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MataPelajaranController extends Controller
 {
@@ -63,5 +66,24 @@ class MataPelajaranController extends Controller
         $mataPelajaran->delete();
 
         return redirect()->route('mata-pelajaran.index')->with('success', 'Mata Pelajaran deleted successfully.');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            Excel::import(new MataPelajaranImport, $request->file('file'));
+
+            DB::commit();
+            return redirect()->route('mata_pelajaran.index')->with('success', 'Books imported successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('mata_pelajaran.index')->with('error', 'Error during import: ' . $e->getMessage());
+        }
     }
 }

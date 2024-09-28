@@ -637,7 +637,7 @@
                             </a>
                         </li>
 
-                    @elseif(Auth::user()->role_id === 2)
+                    @elseif(Auth::user()->role_id === 2 )
                         <!-- Guru -->
                         <li class="nav-item mt-3">
                             <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">KBM</h6>

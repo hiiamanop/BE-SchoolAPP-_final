@@ -26,9 +26,10 @@
                     </button>
                     <!-- Add New Siswa Button -->
                     <button type="button" class="btn btn-primary float-end ms-2" data-bs-toggle="modal"
-                        data-bs-target="#ImportModal">
+                        data-bs-target="#importModal">
                         Import Siswa to Kelas
                     </button>
+
                 </div>
 
                 <!-- Import Modal -->
@@ -53,7 +54,7 @@
                                         @enderror
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-success">Import</button>
+                                        <button type="submit" class="btn btn-primary">Import</button>
                                     </div>
                                 </form>
                             </div>

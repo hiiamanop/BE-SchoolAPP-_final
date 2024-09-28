@@ -2,16 +2,22 @@
 
 namespace App\Imports;
 
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
+use App\Models\GuruPelajaran;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class GuruPelajaranImport implements ToCollection
+class GuruPelajaranImport implements ToModel, WithHeadingRow
 {
     /**
-    * @param Collection $collection
-    */
-    public function collection(Collection $collection)
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function model(array $row)
     {
-        //
+        return new GuruPelajaran([
+            'guru_id' => $row['guru_id'],
+            'mata_pelajaran_id' => $row['mata_pelajaran_id'],
+        ]);
     }
 }

@@ -8,6 +8,39 @@
                     <h6>Mata Pelajaran Table</h6>
                     <a href="{{ route('mata-pelajaran.create') }}" class="btn btn-primary float-end">Create New Mata
                         Pelajaran</a>
+                    <button class="btn btn-primary float-end me-2" data-bs-toggle="modal" data-bs-target="#importModal">
+                        Import Mata Pelajaran
+                    </button>
+                </div>
+                <!-- Import Modal -->
+                <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="importModalLabel">Import Mata Pelajaran</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('mata-pelajaran.import') }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="file" class="form-label">Choose XLSX File</label>
+                                        <input type="file" name="file" class="form-control" id="file" required
+                                            accept=".xlsx">
+                                    </div>
+                                    @error('file')
+                                        <span class="text-danger text-xs">{{ $message }}</span>
+                                    @enderror
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Import</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">

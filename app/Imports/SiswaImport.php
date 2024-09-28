@@ -11,6 +11,11 @@ class SiswaImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+        // Check if mandatory fields are present
+        if (empty($row['name']) || empty($row['email']) || empty($row['password']) || empty($row['role_id']) || empty($row['nomor_induk']) || empty($row['tahun_masuk'])) {
+            return null; // Skip the row if required fields are missing
+        }
+
         return new Siswa([
             'name' => $row['name'],
             'email' => $row['email'],

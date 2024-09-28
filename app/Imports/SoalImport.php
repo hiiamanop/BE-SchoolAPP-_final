@@ -16,4 +16,3 @@ class SoalImport implements ToModel
         ]);
     }
 }
-
