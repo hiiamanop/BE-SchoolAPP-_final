@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('role_id')->constrained()->nullable();
             $table->string('nomor_induk')->nullable();
             $table->year('tahun_masuk')->nullable();
+            $table->bigInteger('reg_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

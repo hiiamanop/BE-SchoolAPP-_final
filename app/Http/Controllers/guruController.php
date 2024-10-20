@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Imports\GuruImport;
-use App\Models\Guru;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
 class GuruController extends Controller
 {
+    protected $roleGuru = 2; // ID untuk role guru
+
     public function index(Request $request)
     {
-        $query = Guru::query();
+        // Query untuk mendapatkan user dengan role guru (role_id = 2)
+        $query = User::where('role_id', $this->roleGuru);
 
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->input('name') . '%');
@@ -35,8 +38,6 @@ class GuruController extends Controller
         return view('gurus.index', compact('gurus'));
     }
 
-
-
     public function createImport()
     {
         return view('gurus.import');
@@ -51,17 +52,18 @@ class GuruController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:gurus,email',
+            'email' => 'required|email|unique:users,email', // Menggunakan tabel users
             'password' => 'required|string|min:8|confirmed',
             'nomor_induk' => 'nullable|string|max:255',
             'tahun_masuk' => 'nullable|digits:4',
         ]);
 
-        Guru::create([
+        // Buat user dengan role guru
+        User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role_id' => 2, // Role ID for guru
+            'role_id' => $this->roleGuru, // Set role_id untuk guru
             'nomor_induk' => $validated['nomor_induk'] ?? null,
             'tahun_masuk' => $validated['tahun_masuk'] ?? null,
         ]);
@@ -69,11 +71,11 @@ class GuruController extends Controller
         return redirect()->route('gurus.index')->with('success', 'Guru created successfully.');
     }
 
-    public function update(Request $request, Guru $guru)
+    public function update(Request $request, User $guru)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:gurus,email,' . $guru->id,
+            'email' => 'required|email|unique:users,email,' . $guru->id, // Unik di tabel users
             'password' => 'nullable|string|min:8|confirmed',
             'nomor_induk' => 'nullable|string|max:255',
             'tahun_masuk' => 'nullable|digits:4',
@@ -91,13 +93,12 @@ class GuruController extends Controller
         return redirect()->route('gurus.index')->with('success', 'Guru updated successfully.');
     }
 
-    public function edit(Guru $guru)
+    public function edit(User $guru)
     {
         return view('gurus.edit', compact('guru'));
     }
 
-
-    public function destroy(Guru $guru)
+    public function destroy(User $guru)
     {
         $guru->delete();
 

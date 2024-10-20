@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('enroll_class', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade'); // Foreign key from kategori_bukus
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Foreign key from kategori_bukus
             $table->foreignId('enroll_id')->constrained('enrolls')->onDelete('cascade'); // Foreign key from kategori_bukus
             $table->timestamps();
         });

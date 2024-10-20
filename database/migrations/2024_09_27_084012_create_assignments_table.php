@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('mata_pelajaran_id')->constrained('mata_pelajarans')->onDelete('cascade'); // Foreign key from Mata Pelajaran
             $table->foreignId('jenis_penilaian_id')->constrained('jenis_penilaians')->onDelete('cascade'); // Foreign key from Jenis Penilaian
             $table->foreignId('token_id')->constrained('tokens')->onDelete('cascade'); // Foreign key from Jenis Penilaian
-            $table->foreignId('enroll_class_id')->constrained('enroll_class')->onDelete('cascade'); // Foreign key from Jenis Penilaian
+            $table->foreignId('enroll_id')->constrained('enrolls')->onDelete('cascade'); // Foreign key from Jenis Penilaian
             $table->string('code_assignment');
             $table->timestamps();
         });

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('guru_pelajarans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('guru_id')->constrained('gurus')->onDelete('cascade'); // Foreign key from kategori_bukus
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Foreign key from kategori_bukus
             $table->foreignId('mata_pelajaran_id')->constrained('mata_pelajarans')->onDelete('cascade'); // Foreign key from kategori_bukus
             $table->timestamps();
         });

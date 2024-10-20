@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('penilaians', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade'); // Foreign key from Mata Pelajaran
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Foreign key from Mata Pelajaran
             $table->foreignId('assignment_id')->constrained('assignments')->onDelete('cascade'); // Foreign key from Mata Pelajaran
             $table->integer('jumlah_soal');
             $table->integer('max_score');

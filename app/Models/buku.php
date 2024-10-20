@@ -12,6 +12,7 @@ class Buku extends Model
     protected $fillable = [
         'kategori_buku_id',
         'judul',
+        'pdf_path',  // Add this line
     ];
 
     public function kategoriBuku()

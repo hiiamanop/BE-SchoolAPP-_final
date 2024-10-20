@@ -12,9 +12,9 @@ class KelasSiswa extends Model
     protected $fillable = ['siswa_id', 'kelas_id'];
 
     // Relationship to the User (Siswa)
-    public function siswa()
+    public function user()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     // Relationship to the Kelas

@@ -18,7 +18,6 @@ class GuruPelajaranController extends Controller
         // Fetch all filters from the request
         $guruId = $request->input('guru_id');
         $mataPelajaranId = $request->input('mata_pelajaran_id');
-        $enroll_code = $request->input('enroll_code');
 
         // Query the database with the applied filters
         $guruPelajarans = GuruPelajaran::with('guru', 'mataPelajaran')
@@ -58,7 +57,6 @@ class GuruPelajaranController extends Controller
         $validated = $request->validate([
             'guru_id' => 'required|exists:gurus,id',
             'mata_pelajaran_id' => 'required|exists:mata_pelajarans,id',
-            'enroll_code' => 'required|string|max:255',
         ]);
 
         GuruPelajaran::create($validated);
@@ -92,7 +90,6 @@ class GuruPelajaranController extends Controller
         $validated = $request->validate([
             'guru_id' => 'required|exists:gurus,id',
             'mata_pelajaran_id' => 'required|exists:mata_pelajarans,id',
-            'enroll_code' => 'required|string|max:255',
         ]);
 
         $guruPelajaran->update($validated);

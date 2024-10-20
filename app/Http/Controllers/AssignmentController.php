@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assignment;
+use App\Models\Enroll;
+use App\Models\EnrollClass;
 use App\Models\MataPelajaran;
 use App\Models\JenisPenilaian;
 use App\Models\Token;
@@ -15,12 +17,13 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        $assignments = Assignment::with('mataPelajaran', 'jenisPenilaian', 'token')->get();
+        $assignments = Assignment::with('mataPelajaran', 'jenisPenilaian', 'token', 'enroll')->get();
         $mataPelajarans = MataPelajaran::all();
         $jenisPenilaians = JenisPenilaian::all();
         $tokens = Token::all();
+        $enroll = Enroll::all();
 
-        return view('assignments.index', compact('assignments', 'mataPelajarans', 'jenisPenilaians', 'tokens'));
+        return view('assignments.index', compact('assignments', 'mataPelajarans', 'jenisPenilaians', 'tokens', 'enroll'));
     }
 
     /**
@@ -45,6 +48,7 @@ class AssignmentController extends Controller
             'mata_pelajaran_id' => 'required|exists:mata_pelajarans,id',
             'jenis_penilaian_id' => 'required|exists:jenis_penilaians,id',
             'token_id' => 'required|exists:tokens,id',
+            'enroll_id' => 'required|exists:enrolls,id',
             'code_assignment' => 'required|string|max:255',
         ]);
 
@@ -84,6 +88,7 @@ class AssignmentController extends Controller
             'mata_pelajaran_id' => 'required|exists:mata_pelajarans,id',
             'jenis_penilaian_id' => 'required|exists:jenis_penilaians,id',
             'token_id' => 'required|exists:tokens,id',
+            'enroll_id' => 'required|exists:enrolls,id',
             'code_assignment' => 'required|string|max:255',
         ]);
 

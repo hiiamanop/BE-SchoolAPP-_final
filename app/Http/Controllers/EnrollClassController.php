@@ -2,19 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\EnrollClassImport;
+use App\Models\Enroll;
 use App\Models\EnrollClass;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EnrollClassController extends Controller
 {
     /**
      * Display a listing of the enrollments.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $enrollClasses = EnrollClass::with(['enroll', 'siswa'])->get();
-        return response()->json($enrollClasses);
+        $filterEnrollId = $request->input('enroll_id');
+
+        // Fetch all enroll classes with siswa, enroll, guru, and class details
+        $query = EnrollClass::with(['siswa', 'enroll.guruPelajaran.guru']);
+
+        // Filter if enroll_id is provided
+        if ($filterEnrollId) {
+            $query->where('enroll_id', $filterEnrollId);
+        }
+
+        $enrollClasses = $query->get();
+
+        // Fetch all students and enrollments for the dropdowns
+        $siswas = Siswa::all();
+        $enrolls = Enroll::all();
+
+        return view('enroll_class.index', compact('enrollClasses', 'siswas', 'enrolls', 'filterEnrollId'));
     }
+
+
 
     /**
      * Store a newly created enrollment.
@@ -26,9 +48,12 @@ class EnrollClassController extends Controller
             'enroll_id' => 'required|exists:enrolls,id',
         ]);
 
-        $enrollClass = EnrollClass::create($validatedData);
-        return response()->json($enrollClass, 201);
+        EnrollClass::create($validatedData);
+
+        // Redirect to the index route
+        return redirect()->route('enroll_classes.index')->with('success', 'Enroll class added successfully!');
     }
+
 
     /**
      * Display the specified enrollment.
@@ -44,16 +69,20 @@ class EnrollClassController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'siswa_id' => 'required|exists:siswas,id',
             'enroll_id' => 'required|exists:enrolls,id',
         ]);
 
         $enrollClass = EnrollClass::findOrFail($id);
-        $enrollClass->update($validatedData);
+        $enrollClass->update([
+            'siswa_id' => $request->siswa_id,
+            'enroll_id' => $request->enroll_id,
+        ]);
 
-        return response()->json($enrollClass);
+        return redirect()->route('enroll_classes.index')->with('success', 'Enroll class updated successfully!');
     }
+
 
     /**
      * Remove the specified enrollment.
@@ -63,6 +92,27 @@ class EnrollClassController extends Controller
         $enrollClass = EnrollClass::findOrFail($id);
         $enrollClass->delete();
 
-        return response()->json(null, 204);
+        // Redirect to the index route
+        return redirect()->route('enroll_classes.index')->with('success', 'Enroll class deleted successfully!');
+    }
+
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            Excel::import(new EnrollClassImport, $request->file('file'));
+
+            DB::commit();
+            return redirect()->route('bukus.index')->with('success', 'Books imported successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('bukus.index')->with('error', 'Error during import: ' . $e->getMessage());
+        }
     }
 }

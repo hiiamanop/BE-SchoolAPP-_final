@@ -35,21 +35,27 @@ class BukuController extends Controller
 
 
     // Store a newly created book in storage
+    // Store the uploaded book (with PDF)
     public function store(Request $request)
     {
-        // Validate the request
-        $validated = $request->validate([
+        // Validate request input, including PDF file
+        $request->validate([
             'judul' => 'required|string|max:255',
             'kategori_buku_id' => 'required|exists:kategori_bukus,id',
+            'pdf' => 'required|mimes:pdf|max:10000', // PDF validation
         ]);
 
-        // Create a new book
-        buku::create([
-            'judul' => $validated['judul'],
-            'kategori_buku_id' => $validated['kategori_buku_id'],
+        // Handle the PDF upload
+        $pdfPath = $request->file('pdf')->store('bukus');
+
+        // Store the book data in the database
+        Buku::create([
+            'judul' => $request->judul,
+            'kategori_buku_id' => $request->kategori_buku_id,
+            'pdf_path' => $pdfPath,
         ]);
 
-        return redirect()->route('bukus.index')->with('success', 'Book created successfully.');
+        return redirect()->route('bukus.index')->with('success', 'Book imported successfully.');
     }
 
     // Show the form for editing the specified book

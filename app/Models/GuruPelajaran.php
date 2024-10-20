@@ -16,13 +16,18 @@ class GuruPelajaran extends Model
 
     // Relationships
 
-    public function guru()
+    public function user()
     {
-        return $this->belongsTo(Guru::class);
+        return $this->belongsTo(User::class);
     }
 
     public function mataPelajaran()
     {
         return $this->belongsTo(MataPelajaran::class);
+    }
+
+    public function enroll()
+    {
+        return $this->hasMany(Enroll::class);
     }
 }

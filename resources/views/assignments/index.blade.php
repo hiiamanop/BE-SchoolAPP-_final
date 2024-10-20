@@ -51,7 +51,17 @@
                                         <label for="token" class="form-label">Token</label>
                                         <select class="form-select" id="token" name="token_id" required>
                                             @foreach ($tokens as $token)
-                                                <option value="{{ $token->id }}">{{ $token->name }}</option>
+                                                <option value="{{ $token->id }}">{{ $token->value }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Enroll Class -->
+                                    <div class="mb-3">
+                                        <label for="enrollClass" class="form-label">Enroll Class</label>
+                                        <select class="form-select" id="enrollClass" name="enroll_class_id" required>
+                                            @foreach ($enroll as $enroll)
+                                                <option value="{{ $enroll->id }}">{{ $enroll->code_enroll }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -86,6 +96,8 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Token</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Code Enroll</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Code Assignment</th>
                                     <th
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -107,12 +119,19 @@
                                             </p>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $assignment->jenisPenilaian->name }}
+                                            <p class="text-xs font-weight-bold mb-0">
+                                                {{ $assignment->jenisPenilaian->name }}
                                             </p>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $assignment->token->name }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $assignment->token->value }}</p>
                                         </td>
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0">
+                                                {{ $assignment->enroll ? $assignment->enroll->code_enroll : 'Not Assigned' }}
+                                            </p>
+                                        </td>
+
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $assignment->code_assignment }}</p>
                                         </td>
@@ -194,11 +213,26 @@
                                                                 @foreach ($tokens as $token)
                                                                     <option value="{{ $token->id }}"
                                                                         {{ $assignment->token_id == $token->id ? 'selected' : '' }}>
-                                                                        {{ $token->name }}
+                                                                        {{ $token->value }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
+                                                        <!-- Enroll -->
+                                                        <div class="mb-3">
+                                                            <label for="enroll{{ $assignment->id }}"
+                                                                class="form-label">Enroll</label>
+                                                            <select class="form-select" id="enroll{{ $assignment->id }}"
+                                                                name="enroll_id" required>
+                                                                @foreach ($enrolls as $enroll)
+                                                                    <option value="{{ $enroll->id }}"
+                                                                        {{ $assignment->enroll_id == $enroll->id ? 'selected' : '' }}>
+                                                                        {{ $enroll->code_enroll }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
                                                         <div class="mb-3">
                                                             <label for="codeAssignment{{ $assignment->id }}"
                                                                 class="form-label">Code Assignment</label>

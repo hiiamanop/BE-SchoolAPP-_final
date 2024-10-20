@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Assignment;
 use App\Models\Event;
-use App\Models\Guru;
-use App\Models\Siswa;
+use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -21,14 +20,19 @@ class DashboardController extends Controller
         $semester = ($currentMonth >= 1 && $currentMonth <= 7) ? 'Genap' : 'Ganjil';
 
         // Get the next event and calculate the time remaining
-        $jumlahSiswa = Siswa::count(); // Get the total count of registered students
-        $jumlahGuru = Guru::count(); // Get the total count of registered teacher
+        $jumlahSiswa = User::where('role_id', 3)->count(); // Get the total count of users with role_id = 3 (siswa)
+        $jumlahGuru = User::where('role_id', 2)->count(); // Get the total count of users with role_id = 2 (guru)
+
         $nextEvent = Event::where('tanggal', '>', Carbon::now())
             ->orderBy('tanggal', 'asc')
             ->first();
 
         $timeToNextEvent = $nextEvent ? Carbon::now()->diffForHumans($nextEvent->tanggal, true) : null;
+        // Ambil semua event dengan relasi assignment
+        $events = Event::with('assignment')->get();
+        // Ambil semua assignment untuk dropdown di modal
+        $assignments = Assignment::all();
 
-        return view('dashboard.index', compact('events', 'nextEvent', 'timeToNextEvent', 'jumlahSiswa', 'jumlahGuru', 'semester'));
+        return view('dashboard.index', compact('events', 'nextEvent', 'timeToNextEvent', 'jumlahSiswa', 'jumlahGuru', 'semester', 'assignments'));
     }
 }

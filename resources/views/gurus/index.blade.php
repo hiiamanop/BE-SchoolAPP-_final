@@ -11,56 +11,60 @@
                         data-bs-target="#importGuruModal">
                         Import Guru
                     </button>
-                    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#filterModal">
+                    <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                        data-bs-target="#filterModal">
                         Filter
                     </button>
 
                     <!-- Filter Modal -->
-<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="filterModalLabel">Filter Gurus</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="filterForm" action="{{ route('gurus.index') }}" method="GET">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ request('name') }}">
+                    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="filterModalLabel">Filter Gurus</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="filterForm" action="{{ route('gurus.index') }}" method="GET">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                value="{{ request('name') }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email" name="email"
+                                                value="{{ request('email') }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="nomor_induk" class="form-label">Nomor Induk</label>
+                                            <input type="text" class="form-control" id="nomor_induk" name="nomor_induk"
+                                                value="{{ request('nomor_induk') }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="tahun_masuk" class="form-label">Tahun Masuk</label>
+                                            <select name="tahun_masuk" id="tahun_masuk" class="form-control">
+                                                <option value="">All</option>
+                                                @foreach ($gurus->pluck('tahun_masuk')->unique() as $tahun)
+                                                    <option value="{{ $tahun }}"
+                                                        {{ request('tahun_masuk') == $tahun ? 'selected' : '' }}>
+                                                        {{ $tahun }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                                            <a href="{{ route('gurus.index') }}" class="btn btn-secondary">Clear</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ request('email') }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="nomor_induk" class="form-label">Nomor Induk</label>
-                        <input type="text" class="form-control" id="nomor_induk" name="nomor_induk" value="{{ request('nomor_induk') }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="tahun_masuk" class="form-label">Tahun Masuk</label>
-                        <select name="tahun_masuk" id="tahun_masuk" class="form-control">
-                            <option value="">All</option>
-                            @foreach ($gurus->pluck('tahun_masuk')->unique() as $tahun)
-                                <option value="{{ $tahun }}" {{ request('tahun_masuk') == $tahun ? 'selected' : '' }}>
-                                    {{ $tahun }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Apply Filters</button>
-                        <a href="{{ route('gurus.index') }}" class="btn btn-secondary">Clear</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-                    
-
 
                     <!-- Import Guru Modal -->
                     <div class="modal fade" id="importGuruModal" tabindex="-1" aria-labelledby="importGuruModalLabel"
@@ -161,7 +165,8 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="editGuruModalLabel{{ $guru->id }}">Edit
+                                                    <h5 class="modal-title" id="editGuruModalLabel{{ $guru->id }}">
+                                                        Edit
                                                         Guru</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>

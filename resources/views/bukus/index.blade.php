@@ -6,43 +6,65 @@
             <div class="card mb-4">
                 <div class="card-header pb-0">
                     <h6>Buku Table</h6>
-                    <a href="{{ route('bukus.create') }}" class="btn btn-primary float-end">Create New Buku</a>
                     <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
-                        data-bs-target="#importSiswaModal">
+                        data-bs-target="#importBukuModal">
                         Import Buku
                     </button>
 
-                    <!-- Import Siswa Modal -->
-                    <div class="modal fade" id="importSiswaModal" tabindex="-1" aria-labelledby="importSiswaModalLabel"
+                    <!-- Import Buku Modal -->
+                    <div class="modal fade" id="importBukuModal" tabindex="-1" aria-labelledby="importBukuModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="importSiswaModalLabel">Import Buku</h5>
+                                    <h5 class="modal-title" id="importBukuModalLabel">Import Buku</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('bukus.import') }}" method="POST"
-                                        enctype="multipart/form-data">
+                                    <form action="{{ route('bukus.store') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="mb-3">
-                                            <label for="file" class="form-label">Select Excel File</label>
-                                            <input type="file" class="form-control" id="file" name="file"
-                                                accept=".xlsx" required>
-                                            @error('file')
+                                            <label for="judul" class="form-label">Judul Buku</label>
+                                            <input type="text" class="form-control" id="judul" name="judul"
+                                                required>
+                                            @error('judul')
                                                 <span class="text-danger text-xs">{{ $message }}</span>
                                             @enderror
                                         </div>
+
+                                        <div class="mb-3">
+                                            <label for="kategori_buku_id" class="form-label">Kategori Buku</label>
+                                            <select class="form-control" id="kategori_buku_id" name="kategori_buku_id"
+                                                required>
+                                                @foreach ($kategori_bukus as $kategoriBuku)
+                                                    <option value="{{ $kategoriBuku->id }}">{{ $kategoriBuku->kategori }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('kategori_buku_id')
+                                                <span class="text-danger text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="pdf" class="form-label">Upload PDF File</label>
+                                            <input type="file" class="form-control" id="pdf" name="pdf"
+                                                accept=".pdf" required>
+                                            @error('pdf')
+                                                <span class="text-danger text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Import</button>
+                                            <button type="submit" class="btn btn-primary">Import Buku</button>
                                         </div>
                                     </form>
-
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
@@ -76,6 +98,11 @@
                                             <p class="text-xs font-weight-bold mb-0">{{ $buku->kategoriBuku->kategori }}</p>
                                         </td>
                                         <td class="align-middle text-center">
+                                            <a href="{{ url('storage/' . $buku->pdf_path) }}" target="_blank"
+                                                class="text-secondary font-weight-bold text-xs btn btn-link"
+                                                data-toggle="tooltip" data-original-title="View PDF">
+                                                View
+                                            </a>
                                             <button type="button"
                                                 class="text-secondary font-weight-bold text-xs btn btn-link"
                                                 data-bs-toggle="modal" data-bs-target="#editBukuModal{{ $buku->id }}"

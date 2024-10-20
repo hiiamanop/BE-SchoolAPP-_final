@@ -11,14 +11,6 @@ class EventController extends Controller
     /**
      * Display a listing of the events.
      */
-    public function index()
-    {
-        $events = Event::with('assignment')->get();
-        $assignments = Assignment::all();
-        return view('events.index', compact('events', 'assignments'));
-    }
-
-
     /**
      * Show the form for creating a new event.
      */
@@ -27,6 +19,7 @@ class EventController extends Controller
         $assignments = Assignment::all(); // Fetch assignments to populate dropdown
         return view('events.create', compact('assignments'));
     }
+
 
     /**
      * Store a newly created event in storage.
@@ -46,6 +39,7 @@ class EventController extends Controller
         // Redirect to the index with success message
         return redirect()->route('events.index')->with('success', 'Event created successfully!');
     }
+
 
     /**
      * Display the specified event.

@@ -5,6 +5,9 @@ use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EnrollClassController;
+use App\Http\Controllers\EnrollController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\GuruPelajaranController;
 use App\Http\Controllers\JenisPenilaianController;
@@ -37,6 +40,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 
@@ -45,6 +49,8 @@ use App\Http\Middleware\RoleMiddleware;
 // Admin-only routes
 Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
     Route::resource('roles', RoleController::class)->except(['show']);
+    Route::resource('users', UserController::class);
+    Route::post('users/import', [UserController::class, 'import'])->name('users.import');
     Route::resource('admins', AdminController::class);
     Route::resource('gurus', GuruController::class);
     Route::post('gurus/import', [GuruController::class, 'import'])->name('gurus.import');
@@ -72,6 +78,11 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
     Route::get('/lembar-jawaban', [LembarJawabanController::class, 'index'])->name('lembar_jawaban.index');
     Route::get('/lembar-jawaban/{assignmentId}/{siswaId}', [LembarJawabanController::class, 'detail'])->name('lembar_jawaban.detail');
     Route::post('/lembar-jawaban/{lembarJawabanId}/update-score', [LembarJawabanController::class, 'updateScore'])->name('lembar_jawaban.update_score');
+    Route::resource('enrolls', EnrollController::class);
+    Route::post('/enroll/import', [EnrollController::class, 'import'])->name('enrolls.import');
+    Route::resource('enroll_classes', EnrollClassController::class);
+    Route::post('/enroll-class/import', [EnrollClassController::class, 'import'])->name('enroll-class.import');
+    Route::resource('events', EventController::class);
 });
 
 // Guru-only routes

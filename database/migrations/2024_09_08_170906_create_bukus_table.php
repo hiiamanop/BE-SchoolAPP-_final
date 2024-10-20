@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('kategori_buku_id')->constrained('kategori_bukus')->onDelete('cascade'); // Foreign key from kategori_bukus
             $table->string('judul');
+            $table->string('pdf_path');
             $table->timestamps();
         });
     }

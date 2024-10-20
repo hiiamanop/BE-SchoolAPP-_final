@@ -22,9 +22,9 @@ class KHS extends Model
     /**
      * Get the siswa that owns the KHS.
      */
-    public function siswa()
+    public function user()
     {
-        return $this->belongsTo(Siswa::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

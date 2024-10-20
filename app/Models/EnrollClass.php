@@ -12,7 +12,7 @@ class EnrollClass extends Model
     protected $table = 'enroll_class';
 
     protected $fillable = [
-        'siswa_id',
+        'user_id',
         'enroll_id'
     ];
 
@@ -27,13 +27,8 @@ class EnrollClass extends Model
     /**
      * Get the siswa associated with the enrollment.
      */
-    public function siswa()
+    public function user()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id');
-    }
-
-    public function assignment()
-    {
-        return $this->hasMany(Assignment::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

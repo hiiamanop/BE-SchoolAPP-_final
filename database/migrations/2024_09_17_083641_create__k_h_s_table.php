@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('_k_h_s', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade'); // Foreign key from siswa
+            $table->foreignId('users_id')->constrained('users')->onDelete('cascade'); // Foreign key from siswa
             $table->foreignId('mata_pelajaran_id')->constrained('mata_pelajarans')->onDelete('cascade'); // Foreign key from Mata Pelajaran
             $table->foreignId('jenis_penilaian_id')->constrained('jenis_penilaians')->onDelete('cascade'); // Foreign key from Jenis Penilaian
             $table->foreignId('tahun_ajaran_id')->constrained('tahun_ajarans')->onDelete('cascade'); // Foreign key from Jenis Penilaian

@@ -80,10 +80,10 @@ class MataPelajaranController extends Controller
             Excel::import(new MataPelajaranImport, $request->file('file'));
 
             DB::commit();
-            return redirect()->route('mata_pelajaran.index')->with('success', 'Books imported successfully');
+            return redirect()->route('mata-pelajaran.index')->with('success', 'Books imported successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('mata_pelajaran.index')->with('error', 'Error during import: ' . $e->getMessage());
+            return redirect()->route('mata-pelajaran.index')->with('error', 'Error during import: ' . $e->getMessage());
         }
     }
 }

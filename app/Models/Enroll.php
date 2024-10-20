@@ -23,4 +23,14 @@ class Enroll extends Model
     {
         return $this->belongsTo(GuruPelajaran::class, 'guru_pelajaran_id');
     }
+
+    public function enrollClass()
+    {
+        return $this->hasMany(EnrollClass::class);
+    }
+
+    public function assigment()
+    {
+        return $this->hasMany(Assignment::class);
+    }
 }

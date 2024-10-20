@@ -18,84 +18,90 @@ class ApiUserController extends Controller
             "password" => $request->password,
         ];
 
-        Auth::attempt($data);
-        if (Auth::check()) {
+        // Percobaan login
+        if (Auth::attempt($data)) {
+            $user = Auth::user();
 
+            // Mengecek apakah user memiliki role yang diizinkan (role_id = 3)
+            if ($user->role_id == 3) {
+                
+                // Menghapus token lama (opsional)
+                $user->tokens()->delete();
 
-            if (Auth::user()->role_id == 3) {
-                $userId = Auth::user()->id;
-                $user = User::where('id', $userId)->first();
+                // Membuat token baru
+                $token = $user->createToken('auth_token')->plainTextToken;
 
-                // menggunakan format json
-                return response()->json(
-                    [
-                        'success' => true,
-                        'message' => 'Login Berhasil',
-                        'data' => $user
-                    ],
-                    200
-                );
+                // Mengembalikan data user dan token ke klien
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Login Berhasil',
+                    'auth_token' => $token,
+                    'data' => $user,
+                ], 200);
             } else {
-                $user = null;
-                // menggunakan format json
-                return response()->json(
-                    [
-                        'success' => false,
-                        'message' => 'Anda Tidak Punya Akses',
-                        'data' => null
-                    ],
-                    500
-                );
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda Tidak Punya Akses',
+                    'data' => null,
+                ], 403);
             }
         } else {
-            $user = null;
-            // menggunakan format json
-            return response()->json(
-                [
-                    'success' => false,
-                    'message' => 'Username / Password Salah',
-                    'data' => null
-                ],
-                500
-            );
+            return response()->json([
+                'success' => false,
+                'message' => 'Username / Password Salah',
+                'data' => null,
+            ], 401);
         }
     }
 
     public function logout()
     {
         try {
-            $logout = Auth::logout();
+            // Mendapatkan user yang sedang login
+            $user = Auth::user();
+            
+            // Menghapus semua token user
+            $user->tokens()->delete();
 
-            // if($logout) {
-            // menggunakan format json
-            return response()->json(
-                [
-                    'success' => true,
-                    'message' => 'Logout Berhasil',
-                    'data' => null
-                ],
-                200
-            );
-            // } else {
-            // menggunakan format json
-            //     return response()->json(
-            //         [
-            //             'success' => true,
-            //             'message' => 'Logout Gagal',
-            //             'data' => null
-            //         ],
-            //         500
-            //     );
-            // }
+            // Mengembalikan respons berhasil logout
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout Berhasil',
+                'data' => null
+            ], 200);
         } catch (Exception $error) {
-            return response()->json(
-                [
+            return response()->json([
+                'success' => false,
+                'message' => 'Logout Gagal',
+                'data' => $error->getMessage()
+            ], 500);
+        }
+    }
+
+    public function profile()
+    {
+        try {
+            $user = Auth::user();
+            
+            if ($user) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data User Berhasil Diambil',
+                    'data' => $user
+                ], 200);
+            } else {
+                return response()->json([
                     'success' => false,
-                    'message' => 'Logout Gagal',
-                    'data' => $error->getMessage()
-                ],
-                500
-            );
+                    'message' => 'User Tidak Ditemukan',
+                    'data' => null
+                ], 404);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi Kesalahan',
+                'data' => $e->getMessage()
+            ], 500);
         }
     }
 }

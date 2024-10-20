@@ -18,7 +18,7 @@ class Assignment extends Model
         'mata_pelajaran_id',
         'jenis_penilaian_id',
         'token_id',
-        'enroll_class_id',
+        'enroll_id',
         'code_assignment',
     ];
 
@@ -38,9 +38,9 @@ class Assignment extends Model
         return $this->belongsTo(JenisPenilaian::class);
     }
 
-    public function enrollCLass()
+    public function enroll()
     {
-        return $this->belongsTo(EnrollClass::class);
+        return $this->belongsTo(Enroll::class);
     }
 
     /**

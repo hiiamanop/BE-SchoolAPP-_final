@@ -26,9 +26,9 @@ class Penilaian extends Model
     /**
      * Get the Siswa (student) associated with the penilaian.
      */
-    public function siswa()
+    public function user()
     {
-        return $this->belongsTo(Siswa::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

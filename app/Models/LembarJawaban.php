@@ -26,9 +26,9 @@ class LembarJawaban extends Model
     }
 
     // Relasi ke Siswa melalui Soal (karena soal terkait dengan assignment dan assignment terkait siswa)
-    public function siswa()
+    public function user()
     {
-        return $this->hasOneThrough(Siswa::class, Soal::class, 'id', 'id', 'soal_id', 'siswa_id');
+        return $this->hasOneThrough(User::class, Soal::class, 'id', 'id', 'soal_id', 'user_id');
     }
 
     // Relasi ke Assignment melalui Soal
