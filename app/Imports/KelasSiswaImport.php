@@ -12,7 +12,7 @@ class KelasSiswaImport implements ToModel, WithHeadingRow
     {
         // Insert a new record into kelas_siswas using siswa_id and kelas_id
         return new KelasSiswa([
-            'siswa_id' => $row['siswa_id'],
+            'user_id' => $row['user_id'],
             'kelas_id' => $row['kelas_id'],
         ]);
     }

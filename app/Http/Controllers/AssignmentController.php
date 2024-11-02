@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Assignment;
 use App\Models\Enroll;
-use App\Models\EnrollClass;
 use App\Models\MataPelajaran;
 use App\Models\JenisPenilaian;
 use App\Models\Token;

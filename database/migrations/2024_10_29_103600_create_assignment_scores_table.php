@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('soals', function (Blueprint $table) {
+        Schema::create('assignment_scores', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('assignment_id')->constrained('assignments')->onDelete('cascade'); // Foreign key from Mata Pelajaran
-            $table->string('soal');
-            $table->integer('type');
+            $table->foreignId('student_id')->constrained('users');
+            $table->foreignId('assignment_id')->constrained();
+            $table->decimal('total_score', 5, 2);
+            $table->text('teacher_notes')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('soals');
+        Schema::dropIfExists('assignment_scores');
     }
 };

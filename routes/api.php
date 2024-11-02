@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ApiEnrollController;
 use App\Http\Controllers\Api\ApiUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,34 +19,16 @@ use App\Http\Controllers\Api\TestController;
 Route::get('/test-controller', [TestController::class, 'index']);
 
 // auth
-Route::post('/login', [App\Http\Controllers\Api\ApiUserController::class, 'login']);
-Route::get('/logout', [App\Http\Controllers\Api\ApiUserController::class, 'logout']);
-
-// profile tanpa middleware
-Route::get('/user/profile', [App\Http\Controllers\Api\ApiUserController::class, 'profile']);
-
-
+Route::post('/login', [ApiUserController::class, 'login']);
+Route::get('/profile/{id}', [ApiUserController::class, 'profile']);
 
 // book
 Route::get('/buku', [App\Http\Controllers\Api\ApiBukuController::class, 'index']);
 Route::get('/buku/{id}', [App\Http\Controllers\Api\ApiBukuController::class, 'show']);
 Route::get('/buku/{id}/downlaod', [App\Http\Controllers\Api\ApiBukuController::class, 'download']);
 
-// enroll
-use App\Http\Controllers\Api\ApiEnrollController;
-use App\Http\Controllers\Api\ApiEnrollClassController;
-
-// Fetch all enrollments
-Route::get('/enrollments', [ApiEnrollController::class, 'index']);
-
-// Fetch enrollment by enrollment code
-Route::get('/enrollments/code/{code_enroll}', [ApiEnrollController::class, 'showByCode']);
-
-// Fetch all enrolled classes for a student
-Route::get('/enrollments/classes', [ApiEnrollClassController::class, 'index']);
-
-// Enroll a student in a class using the enrollment code
-Route::post('/enrollments/join', [ApiEnrollClassController::class, 'store']);
-
-
-
+// enrollment
+Route::middleware(['cors'])->group(function () {
+    Route::post('/enroll', [ApiEnrollController::class, 'enrollToClass']);
+    Route::get('/enrolled-classes/{userId}', [ApiEnrollController::class, 'getEnrolledClasses']);
+});

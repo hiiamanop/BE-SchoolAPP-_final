@@ -11,97 +11,42 @@ use Illuminate\Support\Facades\Auth;
 class ApiUserController extends Controller
 {
     //
+    // Fungsi Login
     public function login(Request $request)
     {
-        $data = [
-            "email" => $request->email,
-            "password" => $request->password,
-        ];
+        $credentials = $request->only('email', 'password');
 
-        // Percobaan login
-        if (Auth::attempt($data)) {
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            // Mengecek apakah user memiliki role yang diizinkan (role_id = 3)
-            if ($user->role_id == 3) {
-                
-                // Menghapus token lama (opsional)
-                $user->tokens()->delete();
-
-                // Membuat token baru
-                $token = $user->createToken('auth_token')->plainTextToken;
-
-                // Mengembalikan data user dan token ke klien
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Login Berhasil',
-                    'auth_token' => $token,
-                    'data' => $user,
-                ], 200);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Anda Tidak Punya Akses',
-                    'data' => null,
-                ], 403);
-            }
-        } else {
             return response()->json([
-                'success' => false,
-                'message' => 'Username / Password Salah',
-                'data' => null,
-            ], 401);
+                'status' => 'success',
+                'user_id' => $user->id, // Kembalikan user_id
+                'data' => $user,
+            ]);
         }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Invalid credentials',
+        ], 401);
     }
 
-    public function logout()
+    public function profile($user_id)
     {
-        try {
-            // Mendapatkan user yang sedang login
-            $user = Auth::user();
-            
-            // Menghapus semua token user
-            $user->tokens()->delete();
-
-            // Mengembalikan respons berhasil logout
+        $user = User::with('role')->find($user_id);
+        
+        if ($user) {
             return response()->json([
-                'success' => true,
-                'message' => 'Logout Berhasil',
-                'data' => null
-            ], 200);
-        } catch (Exception $error) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Logout Gagal',
-                'data' => $error->getMessage()
-            ], 500);
+                'name' => $user->name,
+                'nomor_induk' => $user->nomor_induk,
+                'tahun_masuk' => $user->tahun_masuk,
+                'role' => $user->role->name,
+            ]);
         }
-    }
 
-    public function profile()
-    {
-        try {
-            $user = Auth::user();
-            
-            if ($user) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Data User Berhasil Diambil',
-                    'data' => $user
-                ], 200);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'User Tidak Ditemukan',
-                    'data' => null
-                ], 404);
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi Kesalahan',
-                'data' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'message' => 'User not found',
+        ], 404);
     }
 }

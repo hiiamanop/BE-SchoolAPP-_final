@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Foreign key from Mata Pelajaran
             $table->foreignId('assignment_id')->constrained('assignments')->onDelete('cascade'); // Foreign key from Mata Pelajaran
-            $table->foreignId('soal_id')->constrained('soals')->onDelete('cascade'); // Foreign key from Mata Pelajaran
+            $table->foreignId('question_id')->constrained('questions')->onDelete('cascade'); // Foreign key from Mata Pelajaran
             $table->string('jawaban_siswa'); // Foreign key from Mata Pelajaran
             $table->integer('score')->nullable(); // Foreign key from Mata Pelajaran
             $table->timestamps();

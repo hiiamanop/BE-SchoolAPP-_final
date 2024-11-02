@@ -32,7 +32,7 @@
                                             <label for="guru_pelajaran_id" class="form-label">Select Guru</label>
                                             <select class="form-select" id="guru_pelajaran_id" name="guru_pelajaran_id" required>
                                                 @foreach ($guruPelajaranList as $guruPelajaran)
-                                                    <option value="{{ $guruPelajaran->id }}">{{ $guruPelajaran->guru->name }} - {{ $guruPelajaran->mataPelajaran->name }}</option>
+                                                    <option value="{{ $guruPelajaran->id }}">{{ $guruPelajaran->user->name }} - {{ $guruPelajaran->mataPelajaran->name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('guru_pelajaran_id')
@@ -112,7 +112,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $enroll->guruPelajaran->guru->name }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $enroll->guruPelajaran->user->name }}</p>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $enroll->code_enroll }}</p>
@@ -162,7 +162,7 @@
                                                                 @foreach ($guruPelajaranList as $guruPelajaran)
                                                                     <option value="{{ $guruPelajaran->id }}"
                                                                         {{ $guruPelajaran->id == $enroll->guru_pelajaran_id ? 'selected' : '' }}>
-                                                                        {{ $guruPelajaran->guru->name }} - {{ $guruPelajaran->mataPelajaran->name }}
+                                                                        {{ $guruPelajaran->user->name }} - {{ $guruPelajaran->mataPelajaran->name }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>

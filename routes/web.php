@@ -69,6 +69,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
     Route::resource('kelas_siswas', KelasSiswaController::class);
     Route::post('kelas_siswas/import', [KelasSiswaController::class, 'import'])->name('kelas_siswas.import');
     Route::resource('guru_pelajarans', GuruPelajaranController::class);
+    Route::post('/guru-pelajarans/store', [GuruPelajaranController::class, 'store'])->name('guru_pelajarans.store');
     Route::post('guru_pelajarans/import', [GuruPelajaranController::class, 'import'])->name('guru_pelajarans.import');
     Route::resource('khs', KHSController::class);
     Route::resource('assignments', AssignmentController::class);

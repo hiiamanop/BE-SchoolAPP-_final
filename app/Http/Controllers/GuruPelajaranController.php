@@ -6,6 +6,7 @@ use App\Imports\GuruPelajaranImport;
 use App\Models\GuruPelajaran;
 use App\Models\Guru;
 use App\Models\MataPelajaran;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -16,13 +17,13 @@ class GuruPelajaranController extends Controller
      */ public function index(Request $request)
     {
         // Fetch all filters from the request
-        $guruId = $request->input('guru_id');
+        $guruId = $request->input('user_id');
         $mataPelajaranId = $request->input('mata_pelajaran_id');
 
         // Query the database with the applied filters
-        $guruPelajarans = GuruPelajaran::with('guru', 'mataPelajaran')
+        $guruPelajarans = GuruPelajaran::with('user', 'mataPelajaran')
             ->when($guruId, function ($query, $guruId) {
-                return $query->where('guru_id', $guruId);
+                return $query->where('user_id', $guruId);
             })
             ->when($mataPelajaranId, function ($query, $mataPelajaranId) {
                 return $query->where('mata_pelajaran_id', $mataPelajaranId);
@@ -30,7 +31,7 @@ class GuruPelajaranController extends Controller
             ->get();
 
         // Fetch all gurus and mata pelajarans for the filter dropdowns
-        $gurus = Guru::all();
+        $gurus = User::where('role_id', 2)->get();
         $mataPelajarans = MataPelajaran::all();
 
         return view('guru_pelajarans.index', compact('guruPelajarans', 'gurus', 'mataPelajarans'));
@@ -42,7 +43,7 @@ class GuruPelajaranController extends Controller
      */
     public function create()
     {
-        $gurus = Guru::all(); // Fetch all gurus
+        $gurus = User::where('role_id', 2)->get();
         $mataPelajarans = MataPelajaran::all(); // Fetch all mata pelajaran
 
         return view('guru_pelajarans.create', compact('gurus', 'mataPelajarans'));
@@ -55,14 +56,19 @@ class GuruPelajaranController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'guru_id' => 'required|exists:gurus,id',
+            'guru_id' => 'required|exists:users,id', // Sesuaikan dengan nama field yang dikirimkan
             'mata_pelajaran_id' => 'required|exists:mata_pelajarans,id',
         ]);
 
-        GuruPelajaran::create($validated);
+        // Sesuaikan nama kolom dalam tabel jika berbeda
+        GuruPelajaran::create([
+            'user_id' => $validated['guru_id'],
+            'mata_pelajaran_id' => $validated['mata_pelajaran_id'],
+        ]);
 
         return redirect()->route('guru_pelajarans.index')->with('success', 'Guru Pelajaran created successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -77,7 +83,7 @@ class GuruPelajaranController extends Controller
      */
     public function edit(GuruPelajaran $guruPelajaran)
     {
-        $gurus = Guru::all(); // Fetch all Gurus for the dropdown
+        $gurus = User::where('role_id', 2)->get();
         $mataPelajarans = MataPelajaran::all(); // Fetch all MataPelajarans for the dropdown
         return view('guru_pelajarans.edit', compact('guruPelajaran', 'gurus', 'mataPelajarans'));
     }
@@ -88,14 +94,18 @@ class GuruPelajaranController extends Controller
     public function update(Request $request, GuruPelajaran $guruPelajaran)
     {
         $validated = $request->validate([
-            'guru_id' => 'required|exists:gurus,id',
+            'guru_id' => 'required|exists:users,id',
             'mata_pelajaran_id' => 'required|exists:mata_pelajarans,id',
         ]);
 
-        $guruPelajaran->update($validated);
+        $guruPelajaran->update([
+            'user_id' => $validated['guru_id'],
+            'mata_pelajaran_id' => $validated['mata_pelajaran_id'],
+        ]);
 
         return redirect()->route('guru_pelajarans.index')->with('success', 'Guru Pelajaran updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.

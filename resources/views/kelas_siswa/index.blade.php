@@ -88,7 +88,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $kelasSiswa->siswa->name }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $kelasSiswa->user->name }}</p>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $kelasSiswa->kelas->name }}</p>

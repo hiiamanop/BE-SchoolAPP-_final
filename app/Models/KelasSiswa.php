@@ -9,7 +9,7 @@ class KelasSiswa extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['siswa_id', 'kelas_id'];
+    protected $fillable = ['user_id', 'kelas_id'];
 
     // Relationship to the User (Siswa)
     public function user()

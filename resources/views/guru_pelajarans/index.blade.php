@@ -95,7 +95,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $guruPelajaran->guru->name }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $guruPelajaran->user->name }}</p>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">
@@ -229,59 +229,63 @@
     <!-- Include JavaScript for modal and AJAX form submission -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // AJAX form submission for editing GuruPelajaran
-            document.querySelectorAll('form[id^="editGuruPelajaranForm"]').forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    let formData = new FormData(this);
-                    let formAction = this.getAttribute('action');
-                    fetch(formAction, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-TOKEN': document.querySelector(
-                                    'meta[name="csrf-token"]').getAttribute('content')
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                location.reload();
-                            } else {
-                                // Handle validation errors
-                                console.log(data.errors);
-                            }
+                    // AJAX form submission for editing GuruPelajaran
+                    document.querySelectorAll('form[id^="editGuruPelajaranForm"]').forEach(form => {
+                        form.addEventListener('submit', function(e) {
+                            e.preventDefault();
+                            let formData = new FormData(this);
+                            let formAction = this.getAttribute('action');
+                            fetch(formAction, {
+                                    method: 'POST',
+                                    body: formData,
+                                    headers: {
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                        'X-CSRF-TOKEN': document.querySelector(
+                                            'meta[name="csrf-token"]').getAttribute('content')
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        location.reload();
+                                    } else {
+                                        // Handle validation errors
+                                        console.log(data.errors);
+                                    }
+                                });
                         });
-                });
-            });
-
-            // AJAX form submission for adding new GuruPelajaran
-            document.getElementById('addGuruPelajaranForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                let formData = new FormData(this);
-                let formAction = this.getAttribute('action');
-                fetch(formAction, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content')
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            location.reload();
-                        } else {
-                            // Handle validation errors
-                            console.log(data.errors);
-                        }
                     });
-            });
-        });
+
+                    // AJAX form submission for adding new GuruPelajaran
+                    document.getElementById('addGuruPelajaranForm').addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        let formData = new FormData(this);
+                        let formAction = this.getAttribute('action');
+
+                        fetch(formAction, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                        .getAttribute('content')
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // Optional: Tampilkan pesan sukses dan tutup modal
+                                    console.log('Data saved successfully');
+                                    location.reload(); // Atau perbarui data tanpa reload
+                                } else {
+                                    // Tangani error validasi dari respons
+                                    console.log(data.errors);
+                                }
+                            })
+                            .catch(error => console.error('Error:', error)); // Tangani error fetch
+                    });
     </script>
 @endsection

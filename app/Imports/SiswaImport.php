@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\Siswa;
+use App\Models\User;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +16,7 @@ class SiswaImport implements ToModel, WithHeadingRow
             return null; // Skip the row if required fields are missing
         }
 
-        return new Siswa([
+        return new User([
             'name' => $row['name'],
             'email' => $row['email'],
             'password' => Hash::make($row['password']),

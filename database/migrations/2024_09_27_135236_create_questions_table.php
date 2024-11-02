@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pilihan_gandas', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('question_id')->constrained('questions')->onDelete('cascade'); // Foreign key from Mata Pelajaran
-            $table->string('jawaban'); // Foreign key from Mata Pelajaran
-            $table->boolean('value'); // Foreign key from Mata Pelajaran
+            $table->foreignId('assignment_id')->constrained()->onDelete('cascade');
+            $table->text('question_text');
+            $table->enum('question_type', ['multiple_choice', 'essay']);
+            $table->integer('points')->default(1);
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pilihan_gandas');
+        Schema::dropIfExists('soals');
     }
 };

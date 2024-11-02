@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\Guru;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -21,7 +21,7 @@ class GuruImport implements ToModel, WithHeadingRow
             return null;  // Skip invalid rows
         }
 
-        return new Guru([
+        return new User([
             'name' => $row['name'],
             'email' => $row['email'],
             'password' => Hash::make($row['password']), // Hash the password before saving

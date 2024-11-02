@@ -10,7 +10,7 @@ class GuruPelajaran extends Model
     use HasFactory;
 
     protected $fillable = [
-        'guru_id',
+        'user_id',
         'mata_pelajaran_id',
     ];
 

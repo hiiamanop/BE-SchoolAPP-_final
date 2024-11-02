@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Imports\KelasSiswaImport;
 use App\Models\Kelas;
-use App\Models\Siswa;
 use App\Models\KelasSiswa;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class KelasSiswaController extends Controller
@@ -22,15 +21,15 @@ class KelasSiswaController extends Controller
 
         // Get the list of kelas and siswa for dropdowns
         $kelasList = Kelas::all();
-        $siswaList = Siswa::all();
+        $siswaList = User::where('role_id', 3)->get();
 
         // Query the KelasSiswa model
         if ($kelasId) {
             $kelasSiswaList = KelasSiswa::where('kelas_id', $kelasId)
-                ->with('siswa', 'kelas')
+                ->with('user', 'kelas')
                 ->get();
         } else {
-            $kelasSiswaList = KelasSiswa::with('siswa', 'kelas')->get();
+            $kelasSiswaList = KelasSiswa::with('user', 'kelas')->get();
         }
 
         return view('kelas_siswa.index', [
@@ -46,7 +45,7 @@ class KelasSiswaController extends Controller
     public function create($kelasId)
     {
         // Fetch only siswas with the role of 'siswa' (role_id = 3)
-        $siswas = Siswa::all();
+        $siswaList = User::where('role', 3)->get();
 
         // Fetch all kelas for the dropdown
         $kelasList = Kelas::all();
@@ -60,12 +59,12 @@ class KelasSiswaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'siswa_id' => 'required|exists:siswas,id',
+            'user_id' => 'required|exists:users,id',
             'kelas_id' => 'required|exists:kelas,id',
         ]);
 
         KelasSiswa::create([
-            'siswa_id' => $request->siswa_id,
+            'user_id' => $request->user_id,
             'kelas_id' => $request->kelas_id,
         ]);
 
@@ -76,12 +75,12 @@ class KelasSiswaController extends Controller
     public function update(Request $request, KelasSiswa $kelasSiswa)
     {
         $request->validate([
-            'siswa_id' => 'required|exists:siswas,id',
+            'user_id' => 'required|exists:user,id',
             'kelas_id' => 'required|exists:kelas,id',
         ]);
 
         $kelasSiswa->update([
-            'siswa_id' => $request->siswa_id,
+            'user_id' => $request->user_id,
             'kelas_id' => $request->kelas_id,
         ]);
 
